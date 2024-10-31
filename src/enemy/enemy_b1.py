@@ -1,6 +1,7 @@
 import pygame as pg
 
 from .enemy import EnemyBase
+from ..bullet.bullet_p1 import BulletP1
 from config import Config as CFG
 
 class EnemyB1(EnemyBase):
@@ -26,6 +27,9 @@ class EnemyB1(EnemyBase):
             雑魚敵の高さ
         """
         super().__init__(x, y, w, h)
+        
+        # 弾の一定間隔に発射するために用意
+        self.shot_cycle = 60
                
         # hp, score, surface を上書き
         self.score = 100
@@ -35,13 +39,19 @@ class EnemyB1(EnemyBase):
         self.surface = pg.transform.scale(self.surface, (self.w, self.h))
     
     
-    def update(self, bullets: list[pg.Surface]) -> int:
+    def update(
+        self, 
+        enemy_bullets: list[pg.Surface],
+        player_bullets: list[pg.Surface],
+    ) -> int:
         """雑魚敵の更新処理
 
         Parameters
         ----------
-        bullet : list[pg.Surface]
+        enemy_bullets : list[pg.Surface]
             自機が発射した弾のリスト
+        player_bullets : list[pg.Surface]
+            プレイヤーが発射した弾のリスト
 
         Returns
         -------
@@ -55,7 +65,14 @@ class EnemyB1(EnemyBase):
         self.rect.x += 10
         self.rect.x %= (CFG.screen_w - self.w)
         
+        self.shot_cycle -= 1
         
-        return super().update(bullets)
+        # 弾の発射処理，enemy_bulletsに弾のインスタンスをappendすれば弾が発射される
+        if self.shot_cycle == 0:
+            enemy_bullets.append(BulletP1(self.rect.center[0], self.rect.top, 0, 20))
+            self.shot_cycle = 60
+        
+        
+        return super().update(enemy_bullets, player_bullets)
         
         

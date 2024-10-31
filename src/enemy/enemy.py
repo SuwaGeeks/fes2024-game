@@ -39,15 +39,18 @@ class EnemyBase(pg.sprite.Sprite):
         
         
     def update(
-            self, 
-            bullets: list[pg.Surface]
-        ) -> int:
+        self, 
+        enemy_bullets: list[pg.Surface],
+        player_bullets: list[pg.Surface],
+    ) -> int:
         """雑魚敵の更新処理
 
         Parameters
         ----------
-        bullets : : list[pg.Surface]
+        enemy_bullets : list[pg.Surface]
             自機が発射した弾のリスト
+        player_bullets : list[pg.Surface]
+            プレイヤーが発射した弾のリスト
 
         Returns
         -------
@@ -58,7 +61,7 @@ class EnemyBase(pg.sprite.Sprite):
         """
         
         # プレイヤーに撃破された
-        is_hit = any([self.rect.colliderect(bullet) for bullet in bullets])
+        is_hit = any([self.rect.colliderect(bullet) for bullet in player_bullets])
         if is_hit:
             return self.score
         

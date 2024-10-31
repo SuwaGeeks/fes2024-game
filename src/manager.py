@@ -1,4 +1,5 @@
 import pygame as pg
+import random
 from src.player.player import Player
 from src.enemy.enemy_b1 import EnemyB1
 from src.enemy.enemy import EnemyBase
@@ -32,13 +33,18 @@ class GameManager():
         self.enemy_bullets: list[BulletBase] = []
         self.enemies: list[EnemyBase] = []
         self.boss = None
-        
-        self.enemies.append(EnemyB1(100, 100))
     
     
     def update(self) -> None:
         """各コンポーネントの更新処理
         """
+        
+        # 適当な敵のスポーン
+        if random.random() > 0.995:
+            x = random.randint(0, CFG.screen_h / 2)
+            y = random.randint(0, CFG.screen_w - 48)
+            self.enemies.append(EnemyB1(x, y))
+            
         
         # プレイヤーの更新
         self.player.update(self.player_bullets)
@@ -48,16 +54,19 @@ class GameManager():
             bullet.update()
         for bullet in self.enemy_bullets:
             bullet.update()
+    
+        # 雑魚敵の更新
+        enemy_rets = [enemy.update(self.enemy_bullets, self.player_bullets) for enemy in self.enemies]
+        is_alive = [x == 0 for x in enemy_rets]
+        self.enemies = [enemy for enemy, flag in zip(self.enemies, is_alive) if flag]
+        self.score += sum([max(x, 0) for x in enemy_rets])
         
         # 画面外またはヒットした弾を削除
         is_alive = [bullet.is_alive for bullet in self.player_bullets]
         self.player_bullets = [bullet for bullet, flag in zip(self.player_bullets, is_alive) if flag]
         
-        # 雑魚敵の更新
-        enemy_rets = [enemy.update(self.player_bullets) for enemy in self.enemies]
-        is_alive = [x == 0 for x in enemy_rets]
-        self.enemies = [enemy for enemy, flag in zip(self.enemies, is_alive) if flag]
-        self.score += sum([max(x, 0) for x in enemy_rets])
+        is_alive = [bullet.is_alive for bullet in self.enemy_bullets]
+        self.enemy_bullets = [bullet for bullet, flag in zip(self.enemy_bullets, is_alive) if flag]
         
         pg.display.update()
         
