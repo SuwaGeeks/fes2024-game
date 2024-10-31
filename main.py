@@ -10,3 +10,4 @@ if __name__ == '__main__':
     while game_manager.is_continue():
         game_manager.update()
         game_manager.blit()
+        game_manager.delay()
