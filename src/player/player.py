@@ -96,6 +96,14 @@ class Player(pg.sprite.Sprite):
         
         
     def _shot(self, bullet_list: list[BulletBase]) -> None:
+        """プレイヤーの射出
+        レベルによって弾の種類が変化するのでメソッドにした
+
+        Parameters
+        ----------
+        bullet_list : list[BulletBase]
+            プレイヤーの排出した弾のリスト
+        """
         
         player_center = self.rect.center[0]
         
