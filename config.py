@@ -4,6 +4,7 @@ class Config():
     
     key_map = {
         'exit' : pg.K_ESCAPE,
+        'shot' : pg.K_z,
         'up'   : pg.K_UP,
         'down' : pg.K_DOWN,
         'right': pg.K_RIGHT,
@@ -20,6 +21,7 @@ class Config():
     screen_h = 800
     
     player_speed = 10
+    player_shot_cycle = 20
     
     player_default_level = 1
     player_default_hp = 1

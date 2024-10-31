@@ -53,7 +53,7 @@ class EnemyB1(EnemyBase):
         
         # 移動の処理を書く
         self.rect.x += 10
-        self.rect.x %= CFG.screen_w
+        self.rect.x %= (CFG.screen_w - self.w)
         
         
         return super().update(bullets)

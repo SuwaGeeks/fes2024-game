@@ -72,7 +72,9 @@ class EnemyBase(pg.sprite.Sprite):
                             self.rect.bottom >= CFG.screen_h
                             
         if is_time_over or is_out_of_screen:
-            return 0
+            return -1
+    
+        return 0
     
     
     def blit(
