@@ -6,12 +6,12 @@ class Player(pg.sprite.Sprite):
     
     def __init__(
             self,
-            x: int,
-            y: int, 
-            w: int,
-            h: int, 
+            x: int = int(CFG.screen_w / 2 - 48 / 2),
+            y: int = int(CFG.screen_h * 0.8), 
+            w: int = 48, 
+            h: int = 48, 
         ):
-        """_summary_
+        """プレイヤーを作成
 
         Parameters
         ----------
@@ -28,13 +28,16 @@ class Player(pg.sprite.Sprite):
         
         self.x = x
         self.y = y
+        self.w = w
+        self.h = h
         
         self.level = CFG.player_default_level
         self.hp = CFG.player_default_hp
         self.mp = CFG.player_default_mp
         
         self.surface = pg.image.load('assets/player/player1.png')
-        self.rect    = pg.rect.Rect(x, y, w, h)
+        self.surface = pg.transform.scale(self.surface, (self.w, self.h))
+        self.rect    = pg.rect.Rect(self.x, self.y, self.w, self.h)
         
         
     def update(self):
