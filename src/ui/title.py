@@ -20,12 +20,6 @@ class Title(pg.sprite.Sprite):
         key = pg.key.get_pressed()
         if any(key) or any([joy.get_button(btn) for btn in range(joy.get_numbuttons())]):
             self.is_continue = True
-        # if joy.get_button(1) == 1:
-        #     self.is_continue = True
-        # self.is_continue = any([j.get_button(btn) for btn in range(j.get_numbuttons())][1:])
-        # print([j.get_button(btn) for btn in range(j.get_numbuttons())])
-        
-        
         
     def blit(self, screen: pg.Surface) -> None:
         text_center = CFG.screen_w / 2 - self.text_title.get_width() / 2

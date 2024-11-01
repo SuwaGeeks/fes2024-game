@@ -12,7 +12,8 @@ class Config():
     }
     
     pad_map = {
-        
+        'exit' : 0,
+        'shot' : 1,
     }
     
     is_debug = True

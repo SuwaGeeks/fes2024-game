@@ -98,8 +98,9 @@ class GameManager():
                 return False
             
         # ゲームに割り当てられた終了ボタンで終了
-        key = pg.key.get_pressed()
-        if key[CFG.key_map['exit']]:
+        is_pressed_pad = self.joystick.get_button(CFG.pad_map['exit'])
+        is_pressed_key = pg.key.get_pressed()[CFG.key_map['exit']]
+        if is_pressed_key or is_pressed_pad:
             pg.quit()
             return False
             
