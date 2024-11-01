@@ -16,10 +16,14 @@ class Title(pg.sprite.Sprite):
         
         
         # ボタンを押すとアクションを実行
-        joy = pg.joystick.Joystick(0)
         key = pg.key.get_pressed()
-        if any(key) or any([joy.get_button(btn) for btn in range(joy.get_numbuttons())]):
+        if any(key):
             self.is_continue = True
+        
+        if CFG.use_gamepad:
+            joy = pg.joystick.Joystick(0)
+            if any([joy.get_button(btn) for btn in range(joy.get_numbuttons())]):
+                self.is_continue = True
         
     def blit(self, screen: pg.Surface) -> None:
         text_center = CFG.screen_w / 2 - self.text_title.get_width() / 2
