@@ -2,7 +2,6 @@ import pygame as pg
 from config import Config as CFG
 from ..bullet.bullet import BulletBase
 from ..bullet.bullet_p1 import BulletP1
-import math
 
 class Player(pg.sprite.Sprite):
 
@@ -74,25 +73,19 @@ class Player(pg.sprite.Sprite):
         joy = pg.joystick.Joystick(0)
         
         # 移動処理
-        dx = 0
-        dy = 0
-
+        # TODO: 斜め移動のスピード調整
         if key[CFG.key_map['up']]:
-            dy -= 1
+            self.rect.y -= CFG.player_speed
         if key[CFG.key_map['down']]:
-            dy += 1
+            self.rect.y += CFG.player_speed
         if key[CFG.key_map['right']]:
-            dx += 1
+            self.rect.x += CFG.player_speed
         if key[CFG.key_map['left']]:
-            dx -= 1
+            self.rect.x -= CFG.player_speed
             
-        dy += joy.get_axis(1) 
-        dx += joy.get_axis(0)
-        norm = math.sqrt(dx * dx + dy * dy)    
-
-        self.rect.x += dx / norm * CFG.player_speed
-        self.rect.y += dy / norm * CFG.player_speed
-
+        self.rect.y += joy.get_axis(1) * CFG.player_speed
+        self.rect.x += joy.get_axis(0) * CFG.player_speed
+            
         # 画面外に出ないように
         if self.rect.left < 0:
             self.rect.left = 0
