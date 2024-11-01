@@ -49,7 +49,7 @@ class EnemyBase(pg.sprite.Sprite):
         Parameters
         ----------
         enemy_bullets : list[BulletBase]
-            自機が発射した弾のリスト
+            敵が発射した弾のリスト
         player_bullets : list[BulletBase]
             プレイヤーが発射した弾のリスト
 

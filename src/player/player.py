@@ -33,7 +33,8 @@ class Player(pg.sprite.Sprite):
         self.w = w
         self.h = h
         
-        self.shot_cycle = CFG.player_shot_cycle
+        self.shot_cycle = 0
+        self.god_time   = 0
         
         self.score = 0
         self.level = CFG.player_default_level
@@ -45,19 +46,30 @@ class Player(pg.sprite.Sprite):
         self.rect    = pg.rect.Rect(self.x, self.y, self.w, self.h)
         
         
-    def update(self, bullet_list: list[BulletBase]) -> None:
+    def update(
+        self, 
+        enemy_bullets: list[BulletBase],
+        player_bullets: list[BulletBase],
+    ) -> None:
         """プレイヤーの更新処理
+
+        Parameters
+        ----------
+        enemy_bullets : list[BulletBase]
+            敵が発射した弾のリスト
+        player_bullets : list[BulletBase]
+            プレイヤーが発射した弾のリスト
         """
          
+        # 各カウンタを進める
         if self.shot_cycle > 0:
             self.shot_cycle -= 1
         
-        key = pg.key.get_pressed()
+        if self.god_time > 0:
+            self.god_time -= 1
         
-        # 弾の発射処理 
-        if self.shot_cycle == 0 and key[CFG.key_map['shot']]:
-            self._shot(bullet_list)
-            self.shot_cycle = CFG.player_shot_cycle
+        
+        key = pg.key.get_pressed()
         
         # 移動処理
         # TODO: 斜め移動のスピード調整
@@ -80,6 +92,22 @@ class Player(pg.sprite.Sprite):
         if self.rect.bottom >= CFG.screen_h:
             self.rect.bottom = CFG.screen_h
         
+        # 弾の発射処理 
+        if self.shot_cycle == 0 and key[CFG.key_map['shot']]:
+            self._shot(player_bullets)
+            self.shot_cycle = CFG.player_shot_cycle
+            
+        # 当たり判定
+        for bullet in enemy_bullets:
+            
+            x_p, y_p = self.rect.center
+            
+            # 理不尽さ回避のため自機の当たり判定は中心 1px のみ
+            # if bullet.rect.collidepoint(x_p, y_p) and self.god_time == 0:
+            if bullet.rect.colliderect(self.rect) and self.god_time == 0:
+                self.hp -= 1
+                self.god_time = CFG.player_god_time
+                
     
     
     def blit(
@@ -93,7 +121,13 @@ class Player(pg.sprite.Sprite):
         screen : pg.Surface
             スクリーンのオブジェクト
         """
-        screen.blit(self.surface, self.rect)
+        if self.god_time > 0:
+            # 無敵時間はチカチカさせる
+            blink_per_sec = 4
+            if self.god_time % (CFG.fps/blink_per_sec)  < CFG.fps/blink_per_sec/2:
+                screen.blit(self.surface, self.rect)
+        else:
+            screen.blit(self.surface, self.rect)
         
         
     def _shot(self, bullet_list: list[BulletBase]) -> None:

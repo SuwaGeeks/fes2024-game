@@ -47,7 +47,7 @@ class GameManager():
             
         
         # プレイヤーの更新
-        self.player.update(self.player_bullets)
+        self.player.update(self.enemy_bullets ,self.player_bullets)
         
         # 弾の更新
         for bullet in self.player_bullets:
