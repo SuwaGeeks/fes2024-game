@@ -70,7 +70,7 @@ class Player(pg.sprite.Sprite):
         
         
         key = pg.key.get_pressed()
-        #joy = pg.joystick.Joystick(0)
+        joy = pg.joystick.Joystick(0)
         
         # 移動処理
         # TODO: 斜め移動のスピード調整
@@ -83,9 +83,9 @@ class Player(pg.sprite.Sprite):
         if key[CFG.key_map['left']]:
             self.rect.x -= CFG.player_speed
             
-        #if joy.get_axis(2):
+        self.rect.y += joy.get_axis(0) * CFG.player_speed
+        self.rect.x += joy.get_axis(2) * CFG.player_speed
             
-
         # 画面外に出ないように
         if self.rect.left < 0:
             self.rect.left = 0
@@ -97,7 +97,7 @@ class Player(pg.sprite.Sprite):
             self.rect.bottom = CFG.screen_h
         
         # 弾の発射処理 
-        if self.shot_cycle == 0 and key[CFG.key_map['shot']]:
+        if self.shot_cycle == 0 and (key[CFG.key_map['shot']] or joy.get_button(CFG.pad_map['shot'])):
             self._shot(player_bullets)
             self.shot_cycle = CFG.player_shot_cycle
             
