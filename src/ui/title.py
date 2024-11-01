@@ -14,9 +14,9 @@ class Title(pg.sprite.Sprite):
         self.text_title = self.font_title.render(f'Pyun Pyun 2', True, pg.Color('WHITE'))
         self.text_hint = self.font_hint.render(f'press enter to play', True, pg.Color('WHITE'))
         
-        joy = pg.joystick.Joystick(0)
-
+        
         # ボタンを押すとアクションを実行
+        joy = pg.joystick.Joystick(0)
         key = pg.key.get_pressed()
         if any(key) or any([joy.get_button(btn) for btn in range(joy.get_numbuttons())]):
             self.is_continue = True
