@@ -12,8 +12,11 @@ class Config():
     }
     
     pad_map = {
-        
+        'exit' : 0,
+        'shot' : 1,
     }
+
+    use_gamepad = False
     
     is_debug = True
 
