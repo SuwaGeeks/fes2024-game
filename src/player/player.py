@@ -35,9 +35,10 @@ class Player(pg.sprite.Sprite):
         
         self.shot_cycle = CFG.player_shot_cycle
         
+        self.score = 0
         self.level = CFG.player_default_level
-        self.hp = CFG.player_default_hp
-        self.mp = CFG.player_default_mp
+        self.hp    = CFG.player_default_hp
+        self.mp    = CFG.player_default_mp
         
         self.surface = pg.image.load('assets/player/player1.png')
         self.surface = pg.transform.scale(self.surface, (self.w, self.h))
