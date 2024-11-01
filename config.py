@@ -16,7 +16,7 @@ class Config():
         'shot' : 1,
     }
 
-    use_gamepad = False
+    use_gamepad = True
     
     is_debug = True
 

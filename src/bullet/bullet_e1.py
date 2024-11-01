@@ -3,7 +3,7 @@ import pygame as pg
 from config import Config as CFG
 from .bullet import BulletBase
 
-class BulletP1(BulletBase):
+class BulletE1(BulletBase):
     
     def __init__(
         self,
@@ -11,8 +11,8 @@ class BulletP1(BulletBase):
         y: int,
         v_x: int,
         v_y: int,
-        w: int = 4,
-        h: int= 12
+        w: int = 32,
+        h: int= 32
     ) -> None:
         """弾を生成
 
@@ -33,11 +33,9 @@ class BulletP1(BulletBase):
         """
         super().__init__(x, y, v_x, v_y, w, h)
         
-        pg.mixer.Sound("assets/sounds/shot.mp3").play()
-        
         # surface, damage をオーバライド
         self.damage  = 5
-        self.surface = pg.image.load('assets/bullet/p_bullet1.png')
+        self.surface = pg.image.load('assets/bullet/e_bullet-1.png')
         self.surface = pg.transform.scale(self.surface, (self.w, self.h))
     
     
