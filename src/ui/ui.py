@@ -88,9 +88,10 @@ class UI(pg.sprite.Sprite):
         for i in range(self.mp_1p):
             screen.blit(self.MP_surface, (self.font_size * (i+2), self.row2))
         # レベル
+        # TODO: マジックナンバーをなくす
         screen.blit(self.lv_text, (x_start, self.row3 + 5))
-        for i in range(self.lv_1p):
-            screen.blit(self.Lv_surface, (self.font_size * (i+2), self.row3))
+        pg.draw.rect(screen, '#00FF00', pg.Rect(self.font_size*2, self.row3 + 13, self.font_size * self.lv_1p, 10))
+        
             
         # ステータス(2P)
         if self.hp_2p is not None:
@@ -106,6 +107,6 @@ class UI(pg.sprite.Sprite):
             for i in range(self.mp_2p):
                 screen.blit(self.MP_surface, (x_start - self.font_size * (i+2), self.row2))
             # レベル
+            # TODO: マジックナンバーをなくす
             screen.blit(self.lv_text, (x_start, self.row3 + 5))
-            for i in range(self.lv_2p):
-                screen.blit(self.Lv_surface, (x_start - self.font_size * (i+2), self.row3))
+            pg.draw.rect(screen, '#00FF00', pg.Rect(x_start - self.font_size * (self.lv_2p+1), self.row3 + 13, self.font_size * self.lv_2p, 10))
