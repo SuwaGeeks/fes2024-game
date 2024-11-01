@@ -26,9 +26,12 @@ class GameManager():
             windowの縦解像度
         """
         pg.init()
+        self.joystick = pg.joystick.Joystick(0)
+        self.joystick.init()
         pg.display.set_caption("ぴゅんぴゅん2")
+
         self.screen = pg.display.set_mode((screen_w, screen_h))
-        
+    
         self.player = Player(screen_w/2 - 48/2, screen_h*0.8, 48, 48)
         
         self.step = STEP_TITLE
