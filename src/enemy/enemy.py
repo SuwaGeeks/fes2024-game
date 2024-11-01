@@ -1,15 +1,16 @@
 import pygame as pg
+import random
+import math
+from typing import Union
 from config import Config as CFG
 from ..bullet.bullet import BulletBase
 
 class EnemyBase(pg.sprite.Sprite):
     
-    ttl = CFG.enemy_ttl
-    
     def __init__(
         self,
-        x: int,
-        y: int,
+        x: Union[int, None],
+        y: Union[int, None],
         w: int,
         h: int
     ) -> None:
@@ -17,10 +18,10 @@ class EnemyBase(pg.sprite.Sprite):
 
         Parameters
         ----------
-        x : int
-            雑魚敵の初期x座標
-        y : int
-            雑魚敵の初期y座標
+        x : Union[int, None]
+            雑魚敵の初期x座標. 指定しないと画面外からフェードイン
+        y : Union[int, None]
+            雑魚敵の初期y座標. 指定しないと画面外からフェードイン
         w : int
             雑魚敵の横幅
         h : int
@@ -28,17 +29,27 @@ class EnemyBase(pg.sprite.Sprite):
         """
         super().__init__()
         
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
-        self.rect = pg.rect.Rect(self.x, self.y, self.w, self.h)
+        # random_pos_to_spawn() で参照するため先に定義
+        self.w, self.h = w, h
+        
+        if x is None or y is None:
+            # 初期位置を画面外に設定
+            self.x, self.y = self.random_pos_to_spawn()
+        else:
+            self.x, self.y = x, y
+        
+        
+        self.ttl = CFG.enemy_ttl
+        self.dist_x, self.dist_y = self._random_pos_to_move()
         
         self.score   = None
         self.hp      = None
+        self.speed   = None
         self.surface = None
         
-        
+        self.rect = pg.rect.Rect(self.x, self.y, self.w, self.h)
+    
+    
     def update(
         self, 
         enemy_bullets: list[BulletBase],
@@ -61,6 +72,26 @@ class EnemyBase(pg.sprite.Sprite):
             - それ以外: 0
         """
         
+        self.ttl -= 1
+        
+        # 移動処理
+        # - (dist_x, dist_y) に speed で進む
+        # - 到達すれば新しい (dist_x, dist_y) を設定
+        x = self.dist_x - self.rect.x
+        y = self.dist_y - self.rect.y
+        norm = math.sqrt(x**2 + y**2)
+        
+        if norm > 5:
+            self.rect.x += (x / norm) * self.speed
+            self.rect.y += (y / norm) * self.speed
+        else:
+            self.dist_x, self.dist_y = self._random_pos_to_move()
+            
+            
+        # タイムオーバの敵は画面外にフェードアウト
+        if self.ttl < 0:
+            self.dist_x, self.dist_y = self._random_pos_to_despawn() 
+        
         # プレイヤーに撃破された
         for bullet in player_bullets:
             if self.rect.colliderect(bullet):
@@ -68,15 +99,13 @@ class EnemyBase(pg.sprite.Sprite):
                 pg.mixer.Sound("assets/sounds/e_break.mp3").play()
                 return self.score
             
-        # 画面外かタイムアウトで消滅
-        self.ttl -= 1
-        is_time_over = self.ttl < 0
-        is_out_of_screen = self.rect.left < 0 or \
-                            self.rect.right > CFG.screen_w or \
-                            self.rect.top < 0 or \
-                            self.rect.bottom >= CFG.screen_h
+        # 行動範囲外で消滅
+        is_out_of_screen = self.rect.left < -CFG.spawn_area_width or \
+                            self.rect.right > CFG.screen_w + CFG.spawn_area_width or \
+                            self.rect.top < -CFG.spawn_area_width or \
+                            self.rect.bottom >= CFG.screen_h + CFG.spawn_area_width
                             
-        if is_time_over or is_out_of_screen:
+        if is_out_of_screen:
             return -1
     
         return 0
@@ -95,3 +124,50 @@ class EnemyBase(pg.sprite.Sprite):
         """
         
         screen.blit(self.surface, self.rect)
+        
+    
+    def random_pos_to_spawn(self) -> tuple[int, int]:
+        """スポーン領域の座標を生成
+
+        Returns
+        -------
+        tuple[int, int]
+            スポーン領域の座標 `(x, y)`
+        """
+        
+        r = random.random()
+        if r < 0.3:
+            # 画面上でスポーン(30%)
+            x = random.randint(0, int(CFG.screen_w - self.w))
+            y = -CFG.spawn_area_width
+        else:
+            # 画面脇でスポーン(70%)
+            x = -CFG.spawn_area_width if random.random() < 0.5 else (CFG.screen_w + CFG.spawn_area_width - self.w)
+            y = random.randint(0, CFG.spawn_area_bottom)
+        return x, y
+    
+    
+    def _random_pos_to_move(self) -> tuple[int, int]:
+        """移動領域の座標を生成
+
+        Returns
+        -------
+        tuple[int, int]
+            移動領域の座標 `(x, y)`
+        """
+        x = random.randint(0, int(CFG.screen_w - self.w))
+        y = random.randint(0, int(CFG.spawn_area_bottom))
+        return x, y
+    
+    
+    def _random_pos_to_despawn(self) -> tuple[int, int]:
+        """デスポーン領域の座標を生成
+
+        Returns
+        -------
+        tuple[int, int]
+            デスポーン領域の座標 `(x, y)`
+        """
+        x = -999 if self.rect.x < CFG.screen_w / 2 else 999
+        y = self.rect.x
+        return x, y

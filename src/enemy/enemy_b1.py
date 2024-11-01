@@ -1,5 +1,6 @@
 import pygame as pg
 
+
 from .enemy import EnemyBase
 from ..bullet.bullet_p1 import BulletP1
 from ..bullet.bullet import BulletBase
@@ -9,8 +10,8 @@ class EnemyB1(EnemyBase):
     
     def __init__(
         self,
-        x: int,
-        y: int,
+        x: int = None,
+        y: int = None,
         w: int = 48,
         h: int = 48
     ) -> None:
@@ -30,11 +31,12 @@ class EnemyB1(EnemyBase):
         super().__init__(x, y, w, h)
         
         # 弾の一定間隔に発射するために用意
-        self.shot_cycle = 60
+        self.shot_cycle = 1 * CFG.fps
                
-        # hp, score, surface を上書き
+        # hp, score, speed, surface を上書き
         self.score = 100
-        self.hp = 3
+        self.hp    = 3
+        self.speed = 5
         
         self.surface = pg.image.load('assets/enemy/b1_enemy.png')
         self.surface = pg.transform.scale(self.surface, (self.w, self.h))
@@ -50,7 +52,7 @@ class EnemyB1(EnemyBase):
         Parameters
         ----------
         enemy_bullets : list[BulletBase]
-            敵が発射した弾のリスト
+            が発射した弾のリスト
         player_bullets : list[BulletBase]
             プレイヤーが発射した弾のリスト
 
@@ -61,10 +63,6 @@ class EnemyB1(EnemyBase):
             - 消滅: -1
             - それ以外: 0
         """
-        
-        # 移動の処理を書く
-        self.rect.x += 10
-        self.rect.x %= (CFG.screen_w - self.w)
         
         self.shot_cycle -= 1
         
