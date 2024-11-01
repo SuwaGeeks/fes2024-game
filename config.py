@@ -49,3 +49,6 @@ class Config():
     
     # Enemy settings
     enemy_ttl = 15 * fps
+    
+    spawn_area_width = 64
+    spawn_area_bottom = screen_h / 2

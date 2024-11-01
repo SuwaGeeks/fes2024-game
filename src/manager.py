@@ -121,7 +121,7 @@ class GameManager():
         if random.random() > 0.995:
             x = random.randint(0, CFG.screen_h / 2)
             y = random.randint(0, CFG.screen_w - 48)
-            self.enemies.append(EnemyB1(x, y))
+            self.enemies.append(EnemyB1())
             
         
         # プレイヤーの更新
