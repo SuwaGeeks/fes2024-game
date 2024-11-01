@@ -1,4 +1,5 @@
 import pygame as pg
+from pygame.locals import *
 import random
 from src.player.player import Player
 from src.enemy.enemy_b1 import EnemyB1
@@ -106,6 +107,7 @@ class GameManager():
     def _update_title(self):
         self.title.update()
         self.is_step_up = self.title.is_continue
+    
     
     def _update_play(self):
                 # 適当な敵のスポーン
