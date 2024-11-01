@@ -17,13 +17,10 @@ class UI(pg.sprite.Sprite):
         
         self.font_status = pg.font.SysFont(None, 36)
         
-        # TODO: 正しい画像に差し替える
-        self.Lv_surface = pg.image.load('assets/enemy/b1_enemy.png')
-        self.HP_surface = pg.image.load('assets/enemy/r1_enemy.png')
-        self.MP_surface = pg.image.load('assets/enemy/g1_enemy.png')
+        self.HP_surface = pg.image.load('assets/ui/life.png')
+        self.MP_surface = pg.image.load('assets/ui/bomb.png')
         
         # アイコンサイズをフォントサイズと揃える
-        self.Lv_surface = pg.transform.scale(self.Lv_surface, (self.font_size, self.font_size))
         self.HP_surface = pg.transform.scale(self.HP_surface, (self.font_size, self.font_size))
         self.MP_surface = pg.transform.scale(self.MP_surface, (self.font_size, self.font_size))
         
