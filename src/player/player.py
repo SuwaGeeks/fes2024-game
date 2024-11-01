@@ -83,14 +83,14 @@ class Player(pg.sprite.Sprite):
             self.rect.x -= CFG.player_speed
             
         # 画面外に出ないように
-        if self.rect.left < 0:
-            self.rect.left = 0
-        if self.rect.right > CFG.screen_w:
-            self.rect.right = CFG.screen_w
-        if self.rect.top < 0:
-            self.rect.top = 0
-        if self.rect.bottom >= CFG.screen_h:
-            self.rect.bottom = CFG.screen_h
+        if self.rect.left < CFG.left_limit:
+            self.rect.left = CFG.left_limit
+        if self.rect.right > CFG.right_limit:
+            self.rect.right = CFG.right_limit
+        if self.rect.top < CFG.top_limit:
+            self.rect.top = CFG.top_limit
+        if self.rect.bottom >= CFG.bottom_limit:
+            self.rect.bottom = CFG.bottom_limit
         
         # 弾の発射処理 
         if self.shot_cycle == 0 and key[CFG.key_map['shot']]:
