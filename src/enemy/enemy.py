@@ -1,5 +1,6 @@
 import pygame as pg
 import random
+import math
 from typing import Union
 from config import Config as CFG
 from ..bullet.bullet import BulletBase
@@ -36,14 +37,19 @@ class EnemyBase(pg.sprite.Sprite):
             self.x, self.y = self.random_pos_to_spawn()
         else:
             self.x, self.y = x, y
-            
-        self.rect = pg.rect.Rect(self.x, self.y, self.w, self.h)
+        
+        
+        self.ttl = CFG.enemy_ttl
+        self.dist_x, self.dist_y = self._random_pos_to_move()
         
         self.score   = None
         self.hp      = None
+        self.speed   = None
         self.surface = None
         
-        
+        self.rect = pg.rect.Rect(self.x, self.y, self.w, self.h)
+    
+    
     def update(
         self, 
         enemy_bullets: list[BulletBase],
@@ -65,6 +71,26 @@ class EnemyBase(pg.sprite.Sprite):
             - 消滅: -1
             - それ以外: 0
         """
+        
+        self.ttl -= 1
+        
+        # 移動処理
+        # - (dist_x, dist_y) に speed で進む
+        # - 到達すれば新しい (dist_x, dist_y) を設定
+        x = self.dist_x - self.rect.x
+        y = self.dist_y - self.rect.y
+        norm = math.sqrt(x**2 + y**2)
+        
+        if norm > 5:
+            self.rect.x += (x / norm) * self.speed
+            self.rect.y += (y / norm) * self.speed
+        else:
+            self.dist_x, self.dist_y = self._random_pos_to_move()
+            
+            
+        # タイムオーバの敵は画面外にフェードアウト
+        if self.ttl < 0:
+            self.dist_x, self.dist_y = self._random_pos_to_despawn() 
         
         # プレイヤーに撃破された
         for bullet in player_bullets:
@@ -100,6 +126,13 @@ class EnemyBase(pg.sprite.Sprite):
         
     
     def random_pos_to_spawn(self) -> tuple[int, int]:
+        """スポーン領域の座標を生成
+
+        Returns
+        -------
+        tuple[int, int]
+            スポーン領域の座標 `(x, y)`
+        """
         
         r = random.random()
         if r < 0.3:
@@ -114,12 +147,26 @@ class EnemyBase(pg.sprite.Sprite):
     
     
     def _random_pos_to_move(self) -> tuple[int, int]:
+        """移動領域の座標を生成
+
+        Returns
+        -------
+        tuple[int, int]
+            移動領域の座標 `(x, y)`
+        """
         x = random.randint(0, int(CFG.screen_w - self.w))
         y = random.randint(0, int(CFG.spawn_area_bottom))
         return x, y
     
     
     def _random_pos_to_despawn(self) -> tuple[int, int]:
+        """デスポーン領域の座標を生成
+
+        Returns
+        -------
+        tuple[int, int]
+            デスポーン領域の座標 `(x, y)`
+        """
         x = -999 if self.rect.x < CFG.screen_w / 2 else 999
         y = self.rect.x
         return x, y

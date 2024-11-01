@@ -1,6 +1,5 @@
 import pygame as pg
-import random
-import math
+
 
 from .enemy import EnemyBase
 from ..bullet.bullet_p1 import BulletP1
@@ -33,14 +32,11 @@ class EnemyB1(EnemyBase):
         
         # 弾の一定間隔に発射するために用意
         self.shot_cycle = 1 * CFG.fps
-        self.speed  = 5
-        
-        self.ttl = CFG.enemy_ttl
-        self.dist_x, self.dist_y = self._random_pos_to_move()
                
-        # hp, score, surface を上書き
+        # hp, score, speed, surface を上書き
         self.score = 100
-        self.hp = 3
+        self.hp    = 3
+        self.speed = 5
         
         self.surface = pg.image.load('assets/enemy/b1_enemy.png')
         self.surface = pg.transform.scale(self.surface, (self.w, self.h))
@@ -68,24 +64,7 @@ class EnemyB1(EnemyBase):
             - それ以外: 0
         """
         
-        self.ttl -= 1
         self.shot_cycle -= 1
-        
-        # 移動の処理を書く
-        x = self.dist_x - self.rect.x
-        y = self.dist_y - self.rect.y
-        norm = math.sqrt(x**2 + y**2)
-        
-        if norm > 5:
-            self.rect.x += (x / norm) * self.speed
-            self.rect.y += (y / norm) * self.speed
-        else:
-            self.dist_x, self.dist_y = self._random_pos_to_move()
-            
-        # タイムオーバの敵は画面外にフェードアウト
-        if self.ttl < 0:
-            self.dist_x, self.dist_y = self._random_pos_to_despawn()  
-        
         
         # 弾の発射処理，enemy_bulletsに弾のインスタンスをappendすれば弾が発射される
         if self.shot_cycle == 0:
