@@ -1,5 +1,6 @@
 import pygame as pg
 from config import Config as CFG
+from ..bullet.bullet import BulletBase
 
 class EnemyBase(pg.sprite.Sprite):
     
@@ -40,16 +41,16 @@ class EnemyBase(pg.sprite.Sprite):
         
     def update(
         self, 
-        enemy_bullets: list[pg.Surface],
-        player_bullets: list[pg.Surface],
+        enemy_bullets: list[BulletBase],
+        player_bullets: list[BulletBase],
     ) -> int:
         """雑魚敵の更新処理
 
         Parameters
         ----------
-        enemy_bullets : list[pg.Surface]
+        enemy_bullets : list[BulletBase]
             自機が発射した弾のリスト
-        player_bullets : list[pg.Surface]
+        player_bullets : list[BulletBase]
             プレイヤーが発射した弾のリスト
 
         Returns
@@ -61,11 +62,11 @@ class EnemyBase(pg.sprite.Sprite):
         """
         
         # プレイヤーに撃破された
-        is_hit = any([self.rect.colliderect(bullet) for bullet in player_bullets])
-        if is_hit:
-            return self.score
-        
-        
+        for bullet in player_bullets:
+            if self.rect.colliderect(bullet):
+                bullet.is_alive = False
+                return self.score
+            
         # 画面外かタイムアウトで消滅
         self.ttl -= 1
         is_time_over = self.ttl < 0

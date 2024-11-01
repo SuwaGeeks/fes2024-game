@@ -2,6 +2,7 @@ import pygame as pg
 
 from .enemy import EnemyBase
 from ..bullet.bullet_p1 import BulletP1
+from ..bullet.bullet import BulletBase
 from config import Config as CFG
 
 class EnemyB1(EnemyBase):
@@ -41,16 +42,16 @@ class EnemyB1(EnemyBase):
     
     def update(
         self, 
-        enemy_bullets: list[pg.Surface],
-        player_bullets: list[pg.Surface],
+        enemy_bullets: list[BulletBase],
+        player_bullets: list[BulletBase],
     ) -> int:
         """雑魚敵の更新処理
 
         Parameters
         ----------
-        enemy_bullets : list[pg.Surface]
+        enemy_bullets : list[BulletBase]
             自機が発射した弾のリスト
-        player_bullets : list[pg.Surface]
+        player_bullets : list[BulletBase]
             プレイヤーが発射した弾のリスト
 
         Returns
