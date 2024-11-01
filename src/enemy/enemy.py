@@ -65,6 +65,7 @@ class EnemyBase(pg.sprite.Sprite):
         for bullet in player_bullets:
             if self.rect.colliderect(bullet):
                 bullet.is_alive = False
+                pg.mixer.Sound("assets/sounds/e_break.mp3").play()
                 return self.score
             
         # 画面外かタイムアウトで消滅
