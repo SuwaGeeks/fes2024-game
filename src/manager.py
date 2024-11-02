@@ -36,7 +36,10 @@ class GameManager():
                 self.joystick.init()
             pg.display.set_caption("ぴゅんぴゅん2")
 
-            self.screen = pg.display.set_mode((CFG.screen_w, CFG.screen_h))
+            if CFG.is_fullscreen:
+                self.screen = pg.display.set_mode((CFG.screen_w, CFG.screen_h), FULLSCREEN)
+            else:
+                self.screen = pg.display.set_mode((CFG.screen_w, CFG.screen_h))
     
         self.player = Player(CFG.screen_w/2 - 48/2, CFG.screen_h*0.8, 48, 48)
         self.bomb = Bomb()
