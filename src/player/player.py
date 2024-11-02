@@ -1,8 +1,8 @@
 from typing import Literal
 import pygame as pg
 from config import Config as CFG
-from ..bullet.bullet import BulletBase
-from ..bullet.bullet_p0 import BulletP0
+from ..Bullet import BulletBase
+from ..Bullet.bullet_p0 import BulletP0
 
 class Player(pg.sprite.Sprite):
 
@@ -154,7 +154,7 @@ class Player(pg.sprite.Sprite):
         player_center = self.rect.center[0]
         
         if self.level > 0:
-            bullet_list.append(BulletP1(player_center, self.rect.top, 0, -20))
+            bullet_list.append(BulletP0(player_center, self.rect.top, 0, -20))
             
     
     def use_bomb(self) -> bool:

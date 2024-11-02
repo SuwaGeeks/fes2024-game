@@ -5,7 +5,7 @@ from typing import Union
 from src.bomb.bomb import Bomb
 from src.player.player import Player
 from src import Enemy
-from src.bullet.bullet import BulletBase
+from src.Bullet.bullet import BulletBase
 from src.ui.ui import UI
 from src.ui.title import Title
 

@@ -2,7 +2,7 @@ import pygame as pg
 from config import Config as CFG
 from .bullet import BulletBase
 
-class BulletP2(BulletBase):
+class BulletP4(BulletBase):
     
     def __init__(
         self,
@@ -36,7 +36,7 @@ class BulletP2(BulletBase):
         
         # surface, damage をオーバライド
         self.damage  = 5
-        self.surface = pg.image.load('assets/bullet/p2_bullet.png')
+        self.surface = pg.image.load('assets/bullet/p4_bullet.png')
         self.surface = pg.transform.scale(self.surface, (self.w, self.h))
     
     

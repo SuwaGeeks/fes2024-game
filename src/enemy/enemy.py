@@ -3,7 +3,7 @@ import random
 import math
 from typing import Union
 from config import Config as CFG
-from ..bullet.bullet import BulletBase
+from ..Bullet.bullet import BulletBase
 
 class EnemyBase(pg.sprite.Sprite):
     

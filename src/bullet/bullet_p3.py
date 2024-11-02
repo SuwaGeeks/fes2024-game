@@ -2,7 +2,7 @@ import pygame as pg
 from config import Config as CFG
 from .bullet import BulletBase
 
-class BulletP1(BulletBase):
+class BulletP3(BulletBase):
     
     def __init__(
         self,
