@@ -20,7 +20,7 @@ class Boss1(BossBase):
         self.shot_cycle = 0
         
         # 以下のパラメータをオーバライド
-        self.hp_max = 50
+        self.hp_max = 10000
         self.score  = 10000
         self.speeds = [5, 5, 8]
         

@@ -12,7 +12,7 @@ class Bomb(pg.sprite.Sprite):
         super().__init__()
         
         self.is_bomming = False
-        self.damage = 100
+        self.damage = 30000
         self.radius = 0
         self.speed = 16
         self.player_id = None

@@ -22,8 +22,8 @@ class Boss4(BossBase):
         self.shot_cycle = 0
         
         # 以下のパラメータをオーバライド
-        self.hp_max = 50
-        self.score  = 10000
+        self.hp_max = 40000
+        self.score  = 40000
         self.speeds = [5, 5, 8]
         
         self.surfaces = [pg.image.load(f"assets/boss/4_{i + 1}.png") for i in range(2)]
