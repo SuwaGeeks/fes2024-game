@@ -31,7 +31,7 @@ class BossBase(pg.sprite.Sprite):
         self.is_moving = True
         self.is_alive  = True
         
-        self.hp     = None
+        self.hp     = 0
         self.hp_max = None
         self.score  = None
         

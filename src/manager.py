@@ -161,7 +161,7 @@ class GameManager():
         self.enemy_bullets = [bullet for bullet, flag in zip(self.enemy_bullets, is_alive) if flag]
         
         # UIの更新
-        self.ui.update(self.player)
+        self.ui.update(self.player, boss=self.boss)
     
     
     def _update_score(self):
