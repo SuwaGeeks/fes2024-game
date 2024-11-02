@@ -20,8 +20,8 @@ class Config():
     
     use_gamepad = True
     
-    use_server = False
-    server_addr = 'https://suwageeks.org/fes2024'
+    use_server = True
+    server_addr = 'http://iotaidx.jo.sus.ac.jp:5005/records'
     csv_path = 'score.csv'
     
     is_debug = True
@@ -31,6 +31,7 @@ class Config():
     fps = 60
     screen_w = 600
     screen_h = 800
+    is_fullscreen = False
     
     user_name_max_len = 16
     
@@ -47,12 +48,14 @@ class Config():
     
     # Player settings
     player_speed = 10
-    player_shot_cycle = 20
+    player_shot_cycle = 10
     player_god_time = 2 * fps
     
     player_default_level = 1
     player_default_hp = 3
     player_default_mp = 3
+    
+    stick_threshold = 0.1
     
     
     # Enemy settings

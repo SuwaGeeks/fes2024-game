@@ -20,25 +20,28 @@ class GameManager():
     
     """
     
-    def __init__(self, screen_w: int, screen_h: int) -> None:
+    def __init__(self, init_screen: bool = True) -> None:
         """ゲームマネージャーの作成
 
         Parameters
         ----------
-        screen_w : int
-            windowの横解像度
-        screen_h : int
-            windowの縦解像度
+        init_screen : bool
+            windowの初期化を行うかどうか
         """
-        pg.init()
-        if CFG.use_gamepad:
-            self.joystick = pg.joystick.Joystick(0)
-            self.joystick.init()
-        pg.display.set_caption("ぴゅんぴゅん2")
+        
+        if init_screen:
+            pg.init()
+            if CFG.use_gamepad:
+                self.joystick = pg.joystick.Joystick(0)
+                self.joystick.init()
+            pg.display.set_caption("ぴゅんぴゅん2")
 
-        self.screen = pg.display.set_mode((screen_w, screen_h))
+            if CFG.is_fullscreen:
+                self.screen = pg.display.set_mode((CFG.screen_w, CFG.screen_h), FULLSCREEN)
+            else:
+                self.screen = pg.display.set_mode((CFG.screen_w, CFG.screen_h))
     
-        self.player = Player(screen_w/2 - 48/2, screen_h*0.8, 48, 48)
+        self.player = Player(CFG.screen_w/2 - 48/2, CFG.screen_h*0.8, 48, 48)
         self.bomb = Bomb()
         
         self.step = STEP_TITLE
@@ -108,6 +111,10 @@ class GameManager():
         bool
             ゲームの続行フラグ
         """
+        
+        if self.step == STEP_SCORE:
+            if self.score_board.is_continue:
+                self.__init__(init_screen=False)
         
         # windowの[x]ボタンで終了
         for event in self.pg_event:
@@ -210,12 +217,20 @@ class GameManager():
             
             # ボスの発生条件を満たして雑魚敵が撤退すればボスを生成
             if len(self.enemies) == 0 and self.enemy_cycle == sum(self.sec_to_boss[:self.stage]) * CFG.fps:
-                # TODO: ステージによってボスを変える
-                self.boss = boss.Boss1()
+                if self.stage == 1:
+                    self.boss = boss.Boss1()
+                elif self.stage == 2:
+                    self.boss = boss.Boss2()
+                elif self.stage == 3:
+                    self.boss = boss.Boss3()
+                elif self.stage == 4:
+                    self.boss = boss.Boss4()
+                elif self.stage == 5:
+                    self.boss = boss.Boss5()
             
         else:
             # ボス戦
-            self.boss.update(self.enemy_bullets, self.player_bullets)
+            self.boss.update(self.enemy_bullets, self.player_bullets, self.player)
             # ボス撃破
             if not self.boss.is_alive:
                 self.player.score += self.boss.score

@@ -1,4 +1,5 @@
-import os
+import requests
+import json
 import csv
 import pygame as pg
 from pathlib import Path
@@ -29,6 +30,8 @@ class ScoreBoard(pg.sprite.Sprite):
         self.n_tops = 18
         self.top_scores  = None
         
+        self.is_continue = False
+        
         
     def update(self, event):
         
@@ -45,6 +48,18 @@ class ScoreBoard(pg.sprite.Sprite):
                         self.top_scores = self._init_top_score()
                     elif len(self.name) < CFG.user_name_max_len:
                         self.name += e.unicode
+        else:
+            # 続行処理
+            key = pg.key.get_pressed()
+            if any(key):
+                self.is_continue = True
+                pg.mixer.Sound("assets/sounds/start.mp3").play()
+            
+            if CFG.use_gamepad:
+                joy = pg.joystick.Joystick(0)
+                if any([joy.get_button(btn) for btn in range(joy.get_numbuttons())]):
+                    self.is_continue = True
+                    pg.mixer.Sound("assets/sounds/start.mp3").play()
             
             
     
@@ -108,9 +123,24 @@ class ScoreBoard(pg.sprite.Sprite):
         
         if CFG.use_server:
             # TODO: サーバとの通信の実装
-            pass
+            record = {
+                "name": self.name,
+                "score": self.score,
+                "isCleared": self.is_clear
+            }
+            res = requests.post(CFG.server_addr, json=record)
+            values = json.loads(res.text)
+            print(values)
+            
+            res = requests.get(CFG.server_addr)
+            values = json.loads(res.text)
+
+            scores = [[x['score'], x['time'], x['name'], str(x['isCleared'])] for x in values]
+            
+            top_scores = sorted(scores, reverse=True)[: min(len(scores), self.n_tops)]
+            
         
-        if self.top_scores is None:
+        if top_scores is None:
             
             timestamp = 0
             
@@ -130,6 +160,6 @@ class ScoreBoard(pg.sprite.Sprite):
                 scores = [row for row in reader]
                     
             
-            top_scores = scores[: min(len(scores), self.n_tops)]
+            top_scores = sorted(scores, reverse=True)[: min(len(scores), self.n_tops)]
             
         return sorted(top_scores, reverse=True)

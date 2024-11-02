@@ -1,8 +1,7 @@
 from typing import Literal
 import pygame as pg
 from config import Config as CFG
-from ..Bullet import BulletBase
-from ..Bullet.bullet_p0 import BulletP0
+from .. import Bullet
 
 class Player(pg.sprite.Sprite):
 
@@ -44,23 +43,28 @@ class Player(pg.sprite.Sprite):
         self.hp    = CFG.player_default_hp
         self.mp    = CFG.player_default_mp
         
+        self.lv5_score = None
+        self.n_additional_hps = 0
+        self.n_additional_mps = 0
+        
         self.surface = pg.image.load('assets/player/player1.png')
         self.surface = pg.transform.scale(self.surface, (self.w, self.h))
         self.rect    = pg.rect.Rect(self.x, self.y, self.w, self.h)
         
         
+        
     def update(
         self, 
-        enemy_bullets: list[BulletBase],
-        player_bullets: list[BulletBase],
+        enemy_bullets: list[Bullet.BulletBase],
+        player_bullets: list[Bullet.BulletBase],
     ) -> None:
         """プレイヤーの更新処理
 
         Parameters
         ----------
-        enemy_bullets : list[BulletBase]
+        enemy_bullets : list[Bullet.BulletBase]
             敵が発射した弾のリスト
-        player_bullets : list[BulletBase]
+        player_bullets : list[Bullet.BulletBase]
             プレイヤーが発射した弾のリスト
         """
          
@@ -71,6 +75,26 @@ class Player(pg.sprite.Sprite):
         if self.god_time > 0:
             self.god_time -= 1
         
+        # スコアをもとにレベルアップ
+        self.level = min(5, 1+self.score/20000)
+        if self.level == 5 and self.lv5_score is None:
+            self.lv5_score = self.score
+        
+        # ハートを増やす
+        if self.level == 5:
+            after_lv5_score = self.score - self.lv5_score
+            if after_lv5_score > self.n_additional_hps *10000:
+                pg.mixer.Sound('assets/sounds/hp_up.mp3')
+                n_hps = int((after_lv5_score-self.n_additional_hps*10000)/10000)
+                self.n_additional_hps += n_hps
+                self.hp = min(5, self.hp + n_hps)
+            
+        # 爆弾を増やす
+        if self.score > self.n_additional_mps *15000:
+            pg.mixer.Sound('assets/sounds/hp_up.mp3')
+            n_mps = int((self.score-self.n_additional_mps*15000)/15000)
+            self.n_additional_mps += n_mps
+            self.mp = min(5, self.mp + n_mps)
         
         key = pg.key.get_pressed()
         
@@ -86,8 +110,12 @@ class Player(pg.sprite.Sprite):
             
         if CFG.use_gamepad:
             joy = pg.joystick.Joystick(self.id)
-            self.rect.y += joy.get_axis(1) * CFG.player_speed
-            self.rect.x += joy.get_axis(0) * CFG.player_speed
+            
+            if abs(joy.get_axis(1)) >= CFG.stick_threshold:
+                self.rect.y += joy.get_axis(1) * CFG.player_speed
+            
+            if abs(joy.get_axis(0)) >= CFG.stick_threshold:
+                self.rect.x += joy.get_axis(0) * CFG.player_speed
             
         # 画面外に出ないように
         if self.rect.left < CFG.left_limit:
@@ -139,20 +167,41 @@ class Player(pg.sprite.Sprite):
             screen.blit(self.surface, self.rect)
         
         
-    def _shot(self, bullet_list: list[BulletBase]) -> None:
+    def _shot(self, bullet_list: list[Bullet.BulletBase]) -> None:
         """プレイヤーの射出
         レベルによって弾の種類が変化するのでメソッドにした
 
         Parameters
         ----------
-        bullet_list : list[BulletBase]
+        bullet_list : list[Bullet.BulletBase]
             プレイヤーの排出した弾のリスト
         """
         
         player_center = self.rect.center[0]
+        pg.mixer.Sound("assets/sounds/shot.mp3").play()
         
-        if self.level > 0:
-            bullet_list.append(BulletP0(player_center, self.rect.top, 0, -20))
+        if self.level < 2:
+            # Lv.1 一発
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 0, -20))
+        elif self.level < 3:
+            # Lv.2 3-way
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 5, -20))
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 0, -20))
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, -5, -20))
+        elif self.level < 4:
+            # Lv.3 3-way + 真ん中強化
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 5, -20))
+            bullet_list.append(Bullet.BulletP2(player_center, self.rect.top, 0, -20))
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, -5, -20))
+        else:
+            # Lv.4 5-way + 真ん中強化+2
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 10, -20))
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 5, -20))
+            bullet_list.append(Bullet.BulletP2(player_center+20, self.rect.top, 0, -20))
+            bullet_list.append(Bullet.BulletP4(player_center, self.rect.top-20, 0, -20))
+            bullet_list.append(Bullet.BulletP2(player_center-20, self.rect.top, 0, -20))
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, -5, -20))
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, -10, -20))
             
     
     def use_bomb(self) -> bool:
