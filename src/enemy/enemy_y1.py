@@ -2,11 +2,11 @@ import pygame as pg
 
 
 from .enemy import EnemyBase
-from ..bullet.bullet_e2 import BulletE2
+from ..bullet.bullet_e1 import BulletE1
 from ..bullet.bullet import BulletBase
 from config import Config as CFG
 
-class EnemyB2(EnemyBase):
+class EnemyY1(EnemyBase):
     
     def __init__(
         self,
@@ -34,11 +34,11 @@ class EnemyB2(EnemyBase):
         self.shot_cycle = 1 * CFG.fps
                
         # hp, score, speed, surface を上書き
-        self.score = 200
+        self.score = 100
         self.hp    = 3
         self.speed = 5
         
-        self.surfaces = [pg.image.load(f"assets/enemy/b2_{i + 1}.png") for i in range(2)]
+        self.surfaces = [pg.image.load(f"assets/enemy/y1_{i + 1}.png") for i in range(2)]
         self.surfaces = [pg.transform.scale(surface, (self.h, self.w)) for surface in self.surfaces]
     
     
@@ -67,10 +67,11 @@ class EnemyB2(EnemyBase):
         
         # 弾の発射処理，enemy_bulletsに弾のインスタンスをappendすれば弾が発射される
         if self.shot_cycle == 0:
-            enemy_bullets.append(BulletE2(self.rect.center[0], self.rect.bottom, 0, 20))
-            enemy_bullets.append(BulletE2(self.rect.center[0] + 10, self.rect.bottom, 0, 20))
-            self.shot_cycle = 60
-        
+            enemy_bullets.append(BulletE1(self.rect.center[0], self.rect.bottom, 0, 20))
+            enemy_bullets.append(BulletE1(self.rect.center[0], self.rect.bottom + 50, 0, 20))
+            enemy_bullets.append(BulletE1(self.rect.center[0], self.rect.bottom + 100, 0, 20))
+
+            self.shot_cycle = 1 * CFG.fps
         
         return super().update(enemy_bullets, player_bullets)
         

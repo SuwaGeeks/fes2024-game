@@ -35,7 +35,7 @@ class BulletE1(BulletBase):
         
         # surface, damage をオーバライド
         self.damage  = 5
-        self.surface = pg.image.load('assets/bullet/p_bullet1.png')
+        self.surface = pg.image.load('assets/bullet/bullet-0.png')
         self.surface = pg.transform.scale(self.surface, (self.w, self.h))
     
     
