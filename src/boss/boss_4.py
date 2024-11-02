@@ -3,7 +3,7 @@ from config import Config as CFG
 from ..Bullet.bullet import BulletBase
 from .boss import BossBase
 
-class Boss1(BossBase):
+class Boss4(BossBase):
     
     def __init__(self, w = 48, h = 48):
         """ボスを作成
@@ -23,7 +23,7 @@ class Boss1(BossBase):
         self.hp_max = 10
         self.score  = 10000
         
-        self.surfaces = [pg.image.load(f"assets/boss/1_{i + 1}.png") for i in range(2)]
+        self.surfaces = [pg.image.load(f"assets/boss/4_{i + 1}.png") for i in range(2)]
         self.surfaces = [pg.transform.scale(surface, (self.h, self.w)) for surface in self.surfaces]
         
         

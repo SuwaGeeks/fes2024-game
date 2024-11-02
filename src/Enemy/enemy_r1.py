@@ -67,7 +67,7 @@ class EnemyR1(EnemyBase):
         
         # 弾の発射処理，enemy_bulletsに弾のインスタンスをappendすれば弾が発射される
         if self.shot_cycle == 0:
-            enemy_bullets.append(BulletE2(self.rect.center[0], self.rect.bottom, 5, 20))
+            enemy_bullets.append(BulletE2(self.rect.center[0], self.rect.bottom, 5, 10))
             self.shot_cycle = 60
         
         return super().update(enemy_bullets, player_bullets)

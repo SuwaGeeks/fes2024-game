@@ -39,6 +39,10 @@ class BossBase(pg.sprite.Sprite):
         
         self.rect = pg.rect.Rect(self.x, self.y, self.w, self.h)
         
+        # アニメーションのリスト
+        self.surfaces:list[pg.Surface] = []
+        self.anime_cycle = 0
+
     def update(
         self, 
         enemy_bullets: list[BulletBase],
@@ -53,6 +57,7 @@ class BossBase(pg.sprite.Sprite):
         player_bullets : list[BulletBase]
             プレイヤーが発射した弾のリスト
         """
+        self.anime_cycle += 1
         if self.is_moving:
             # 中心に移動する（攻撃は通らない）
             speed = 3
@@ -111,8 +116,14 @@ class BossBase(pg.sprite.Sprite):
         # リングの描画
         for r in self.rings_r:
             pg.draw.circle(screen, '#00bfff', self.rect.center, r, 2)
-        screen.blit(self.surface, self.rect)
+        # screen.blit(self.surface, self.rect)
         
+        x = CFG.fps / 2
+        y = self.anime_cycle % x
+        if y <= x / 2:
+           screen.blit(self.surfaces[0],self.rect)
+        else:
+            screen.blit(self.surfaces[1],self.rect)
         
     def _update_1(
         self, 
