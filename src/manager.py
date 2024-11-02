@@ -121,9 +121,9 @@ class GameManager():
             x = random.randint(0, CFG.screen_h / 2)
             y = random.randint(0, CFG.screen_w - 48)
             self.enemies.append(enemy.EnemyR1())
-            self.enemies.append(enemy.EnemyB2())
-            self.enemies.append(enemy.EnemyY1())
-            self.enemies.append(enemy.EnemyG3())
+            # self.enemies.append(enemy.EnemyB2())
+            # self.enemies.append(enemy.EnemyY1())
+            # self.enemies.append(enemy.EnemyG3())
             
         
         # プレイヤーの更新
