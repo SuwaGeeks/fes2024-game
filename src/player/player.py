@@ -1,8 +1,7 @@
 from typing import Literal
 import pygame as pg
 from config import Config as CFG
-from ..Bullet import BulletBase
-from ..Bullet.bullet_p0 import BulletP0
+from .. import Bullet
 
 class Player(pg.sprite.Sprite):
 
@@ -51,16 +50,16 @@ class Player(pg.sprite.Sprite):
         
     def update(
         self, 
-        enemy_bullets: list[BulletBase],
-        player_bullets: list[BulletBase],
+        enemy_bullets: list[Bullet.BulletBase],
+        player_bullets: list[Bullet.BulletBase],
     ) -> None:
         """プレイヤーの更新処理
 
         Parameters
         ----------
-        enemy_bullets : list[BulletBase]
+        enemy_bullets : list[Bullet.BulletBase]
             敵が発射した弾のリスト
-        player_bullets : list[BulletBase]
+        player_bullets : list[Bullet.BulletBase]
             プレイヤーが発射した弾のリスト
         """
          
@@ -143,20 +142,41 @@ class Player(pg.sprite.Sprite):
             screen.blit(self.surface, self.rect)
         
         
-    def _shot(self, bullet_list: list[BulletBase]) -> None:
+    def _shot(self, bullet_list: list[Bullet.BulletBase]) -> None:
         """プレイヤーの射出
         レベルによって弾の種類が変化するのでメソッドにした
 
         Parameters
         ----------
-        bullet_list : list[BulletBase]
+        bullet_list : list[Bullet.BulletBase]
             プレイヤーの排出した弾のリスト
         """
         
         player_center = self.rect.center[0]
+        pg.mixer.Sound("assets/sounds/shot.mp3").play()
         
-        if self.level > 0:
-            bullet_list.append(BulletP0(player_center, self.rect.top, 0, -20))
+        if self.level < 2:
+            # Lv.1 一発
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 0, -20))
+        elif self.level < 3:
+            # Lv.2 3-way
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 5, -20))
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 0, -20))
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, -5, -20))
+        elif self.level < 4:
+            # Lv.3 3-way + 真ん中強化
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 5, -20))
+            bullet_list.append(Bullet.BulletP2(player_center, self.rect.top, 0, -20))
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, -5, -20))
+        elif self.level < 5:
+            # Lv.4 5-way + 真ん中強化+2
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 10, -20))
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 5, -20))
+            bullet_list.append(Bullet.BulletP2(player_center+20, self.rect.top, 0, -20))
+            bullet_list.append(Bullet.BulletP4(player_center, self.rect.top-20, 0, -20))
+            bullet_list.append(Bullet.BulletP2(player_center-20, self.rect.top, 0, -20))
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, -5, -20))
+            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, -10, -20))
             
     
     def use_bomb(self) -> bool:

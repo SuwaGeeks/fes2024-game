@@ -32,7 +32,7 @@ class BulletP2(BulletBase):
         """
         super().__init__(x, y, v_x, v_y, w, h)
         
-        pg.mixer.Sound("assets/sounds/shot.mp3").play()
+        # pg.mixer.Sound("assets/sounds/shot.mp3").play()
         
         # surface, damage をオーバライド
         self.damage  = 5

@@ -47,7 +47,7 @@ class Config():
     
     # Player settings
     player_speed = 10
-    player_shot_cycle = 20
+    player_shot_cycle = 10
     player_god_time = 2 * fps
     
     player_default_level = 1
