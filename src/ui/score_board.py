@@ -30,6 +30,8 @@ class ScoreBoard(pg.sprite.Sprite):
         self.n_tops = 18
         self.top_scores  = None
         
+        self.is_continue = False
+        
         
     def update(self, event):
         
@@ -46,6 +48,18 @@ class ScoreBoard(pg.sprite.Sprite):
                         self.top_scores = self._init_top_score()
                     elif len(self.name) < CFG.user_name_max_len:
                         self.name += e.unicode
+        else:
+            # 続行処理
+            key = pg.key.get_pressed()
+            if any(key):
+                self.is_continue = True
+                pg.mixer.Sound("assets/sounds/start.mp3").play()
+            
+            if CFG.use_gamepad:
+                joy = pg.joystick.Joystick(0)
+                if any([joy.get_button(btn) for btn in range(joy.get_numbuttons())]):
+                    self.is_continue = True
+                    pg.mixer.Sound("assets/sounds/start.mp3").play()
             
             
     
