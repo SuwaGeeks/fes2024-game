@@ -69,6 +69,7 @@ class EnemyG2(EnemyBase):
         if self.shot_cycle == 0:
             enemy_bullets.append(BulletE1(self.rect.center[0], self.rect.bottom, -10, 10))
             enemy_bullets.append(BulletE1(self.rect.center[0], self.rect.bottom, 10, 10))
+
             self.shot_cycle = 30
         
         

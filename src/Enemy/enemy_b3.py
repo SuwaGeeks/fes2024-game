@@ -70,6 +70,7 @@ class EnemyB3(EnemyBase):
             enemy_bullets.append(BulletE3(self.rect.center[0], self.rect.bottom, 0, 5))
             enemy_bullets.append(BulletE3(self.rect.center[0] + 5, self.rect.bottom, 0, 10))
             enemy_bullets.append(BulletE3(self.rect.center[0] + 5 + 5, self.rect.bottom, 0, 5))
+
             self.shot_cycle = 70
         
         

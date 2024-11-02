@@ -68,6 +68,7 @@ class EnemyG1(EnemyBase):
         # 弾の発射処理，enemy_bulletsに弾のインスタンスをappendすれば弾が発射される
         if self.shot_cycle == 0:
             enemy_bullets.append(BulletE3(self.rect.center[0], self.rect.bottom, 0, 10))
+
             self.shot_cycle = 60
         
         

@@ -71,6 +71,7 @@ class EnemyY1(EnemyBase):
             enemy_bullets.append(BulletE1(self.rect.center[0], self.rect.bottom + 50, 0, 10))
             enemy_bullets.append(BulletE1(self.rect.center[0], self.rect.bottom + 100, 0, 10))
 
+
             self.shot_cycle = 1 * CFG.fps
         
         return super().update(enemy_bullets, player_bullets)
