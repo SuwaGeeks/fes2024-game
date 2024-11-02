@@ -54,6 +54,8 @@ class Config():
     player_default_hp = 3
     player_default_mp = 3
     
+    stick_threshold = 0.1
+    
     
     # Enemy settings
     enemy_ttl = 15 * fps

@@ -86,8 +86,12 @@ class Player(pg.sprite.Sprite):
             
         if CFG.use_gamepad:
             joy = pg.joystick.Joystick(self.id)
-            self.rect.y += joy.get_axis(1) * CFG.player_speed
-            self.rect.x += joy.get_axis(0) * CFG.player_speed
+            
+            if abs(joy.get_axis(1)) >= CFG.stick_threshold:
+                self.rect.y += joy.get_axis(1) * CFG.player_speed
+            
+            if abs(joy.get_axis(0)) >= CFG.stick_threshold:
+                self.rect.x += joy.get_axis(0) * CFG.player_speed
             
         # 画面外に出ないように
         if self.rect.left < CFG.left_limit:
