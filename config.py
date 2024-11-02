@@ -31,7 +31,7 @@ class Config():
     fps = 60
     screen_w = 600
     screen_h = 800
-    is_fullscreen = True
+    is_fullscreen = False
     
     user_name_max_len = 16
     
