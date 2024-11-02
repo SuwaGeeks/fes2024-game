@@ -1,4 +1,5 @@
-import os
+import requests
+import json
 import csv
 import pygame as pg
 from pathlib import Path
@@ -108,9 +109,24 @@ class ScoreBoard(pg.sprite.Sprite):
         
         if CFG.use_server:
             # TODO: サーバとの通信の実装
-            pass
+            record = {
+                "name": self.name,
+                "score": self.score,
+                "isCleared": self.is_clear
+            }
+            res = requests.post(CFG.server_addr, json=record)
+            values = json.loads(res.text)
+            print(values)
+            
+            res = requests.get(CFG.server_addr)
+            values = json.loads(res.text)
+
+            scores = [[x['score'], x['time'], x['name'], str(x['isCleared'])] for x in values]
+            
+            top_scores = sorted(scores, reverse=True)[: min(len(scores), self.n_tops)]
+            
         
-        if self.top_scores is None:
+        if top_scores is None:
             
             timestamp = 0
             

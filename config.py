@@ -20,8 +20,8 @@ class Config():
     
     use_gamepad = True
     
-    use_server = False
-    server_addr = 'https://suwageeks.org/fes2024'
+    use_server = True
+    server_addr = 'http://iotaidx.jo.sus.ac.jp:5005/records'
     csv_path = 'score.csv'
     
     is_debug = True
