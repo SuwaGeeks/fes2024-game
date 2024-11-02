@@ -91,15 +91,15 @@ class BossBase(pg.sprite.Sprite):
                     bullet.is_alive = False
                     self.hp -= bullet.damage
                     
-                    # 撃破
-                    if self.hp <= 0:
-                        self.is_moving = True
-                        pg.mixer.Sound("assets/sounds/e_break.mp3").play()
-                        
-                        if self.step == 3:
-                            self.is_alive = False
-                        else:
-                            self.step += 1
+            # 撃破
+            if self.hp <= 0:
+                self.is_moving = True
+                pg.mixer.Sound("assets/sounds/e_break.mp3").play()
+                
+                if self.step == 3:
+                    self.is_alive = False
+                else:
+                    self.step += 1
             
     
     def blit(
