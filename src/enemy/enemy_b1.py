@@ -1,12 +1,12 @@
 import pygame as pg
 
-
 from .enemy import EnemyBase
 from ..bullet.bullet_e2 import BulletE2
 from ..bullet.bullet import BulletBase
 from config import Config as CFG
 
 class EnemyB1(EnemyBase):
+    
     
     def __init__(
         self,
@@ -40,7 +40,6 @@ class EnemyB1(EnemyBase):
         
         self.surfaces = [pg.image.load(f"assets/enemy/b1_{i + 1}.png") for i in range(2)]
         self.surfaces = [pg.transform.scale(surface, (self.h, self.w)) for surface in self.surfaces]
-    
     
     def update(
         self, 
