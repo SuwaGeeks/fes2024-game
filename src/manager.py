@@ -8,6 +8,7 @@ from src import Enemy
 from src.Bullet.bullet import BulletBase
 from src.ui.ui import UI
 from src.ui.title import Title
+from src.ui.score_board import ScoreBoard
 
 from src import boss
 
@@ -45,6 +46,7 @@ class GameManager():
         
         self.title = Title()
         self.ui = UI()
+        self.score_board = None
         
         self.player_bullets: list[BulletBase] = []
         self.enemy_bullets: list[BulletBase] = []
@@ -53,6 +55,7 @@ class GameManager():
         self.boss: Union[boss.BossBase, None] = None
         
         self.stage = 1
+        self.pg_event = pg.event.get()
         
         # ボス出現までの時間
         self.enemy_cycle = 0
@@ -63,6 +66,8 @@ class GameManager():
         """各コンポーネントの更新処理
         """
         
+        self.pg_event = pg.event.get()
+        
         if self.is_step_up:
             self.step += 1
             self.is_step_up = False
@@ -71,7 +76,7 @@ class GameManager():
             self._update_title()
         elif self.step == STEP_PLAY:
             self._update_play()
-        elif self.step == STEP_TITLE:
+        elif self.step == STEP_SCORE:
             self._update_score()
         
         
@@ -83,7 +88,7 @@ class GameManager():
             self._blit_title()
         elif self.step == STEP_PLAY:
             self._blit_play()
-        elif self.step == STEP_TITLE:
+        elif self.step == STEP_SCORE:
             self._blit_score()
         
         pg.display.flip()
@@ -105,7 +110,7 @@ class GameManager():
         """
         
         # windowの[x]ボタンで終了
-        for event in pg.event.get():
+        for event in self.pg_event:
             if event.type == pg.QUIT:
                 pg.quit()
                 return False
@@ -188,13 +193,23 @@ class GameManager():
         
         # UIの更新
         self.ui.update(self.player, boss=self.boss)
+        
+        # クリア/ゲームオーバー処理
+        if self.stage > 5 or self.player.hp == 0:
+            
+            score = self.player.score
+            is_clear = self.player.hp > 0
+            
+            self.score_board = ScoreBoard(score, is_clear)
+            self.is_step_up = True
     
     
     def _update_score(self):
-        pass
+        self.score_board.update(self.pg_event)
     
     
     def _blit_title(self):
+        self.screen.fill(pg.Color("BLACK")) 
         self.title.blit(self.screen)
     
     
@@ -222,4 +237,5 @@ class GameManager():
         
     
     def _blit_score(self):
-        pass
+        self.screen.fill(pg.Color("BLACK")) 
+        self.score_board.blit(self.screen)

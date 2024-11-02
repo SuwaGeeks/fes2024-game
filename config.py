@@ -18,8 +18,11 @@ class Config():
         'bomb' : 3
     }
     
-
     use_gamepad = True
+    
+    use_server = False
+    server_addr = 'https://suwageeks.org/fes2024'
+    csv_path = 'score.csv'
     
     is_debug = True
 
@@ -28,6 +31,8 @@ class Config():
     fps = 60
     screen_w = 600
     screen_h = 800
+    
+    user_name_max_len = 16
     
     # UI settings
     ui_frame_width = 5
