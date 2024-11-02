@@ -50,7 +50,7 @@ class GameManager():
         self.enemy_bullets: list[BulletBase] = []
         
         self.enemies: list[Enemy.EnemyBase] = []
-        self.boss: Union[boss.BossBase, None] = boss.Boss5()
+        self.boss: Union[boss.BossBase, None] = None
         
         self.stage = 1
         
