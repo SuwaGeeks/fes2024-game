@@ -1,12 +1,12 @@
 import pygame as pg
 
-
 from .enemy import EnemyBase
 from ..bullet.bullet_p1 import BulletP1
 from ..bullet.bullet import BulletBase
 from config import Config as CFG
 
 class EnemyB1(EnemyBase):
+    
     
     def __init__(
         self,
@@ -35,12 +35,12 @@ class EnemyB1(EnemyBase):
                
         # hp, score, speed, surface を上書き
         self.score = 100
-        self.hp    = 3
+        self.hp    = 10
         self.speed = 5
         
         self.surface = pg.image.load('assets/enemy/b1_enemy.png')
         self.surface = pg.transform.scale(self.surface, (self.w, self.h))
-    
+        
     
     def update(
         self, 

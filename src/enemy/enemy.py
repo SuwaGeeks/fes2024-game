@@ -94,8 +94,12 @@ class EnemyBase(pg.sprite.Sprite):
         
         # プレイヤーに撃破された
         for bullet in player_bullets:
+            
             if self.rect.colliderect(bullet):
+                self.hp -= bullet.damage
                 bullet.is_alive = False
+                
+            if self.hp <= 0:
                 pg.mixer.Sound("assets/sounds/e_break.mp3").play()
                 return self.score
             
