@@ -3,6 +3,7 @@ import math
 import random
 from config import Config as CFG
 from ..Bullet.bullet import BulletBase
+from ..player.player import Player
 
 class BossBase(pg.sprite.Sprite):
     
@@ -52,6 +53,7 @@ class BossBase(pg.sprite.Sprite):
         self, 
         enemy_bullets: list[BulletBase],
         player_bullets: list[BulletBase],
+        player: Player
     ) -> None:
         """雑魚敵の更新処理
 
@@ -61,7 +63,12 @@ class BossBase(pg.sprite.Sprite):
             敵が発射した弾のリスト
         player_bullets : list[BulletBase]
             プレイヤーが発射した弾のリスト
+        player : Player
+            プレイヤーのインスタンス
         """
+        
+        self.player_x, self.player_y = player.rect.center
+        
         self.anime_cycle += 1
         if self.is_moving:
             # 中心に移動する（攻撃は通らない）
