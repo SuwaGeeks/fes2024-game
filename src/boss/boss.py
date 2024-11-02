@@ -35,6 +35,8 @@ class BossBase(pg.sprite.Sprite):
         self.hp_max = None
         self.score  = None
         
+        self.rings_r = [0, 0, 0]
+        
         self.rect = pg.rect.Rect(self.x, self.y, self.w, self.h)
         
     def update(
@@ -63,8 +65,12 @@ class BossBase(pg.sprite.Sprite):
                 self.rect.y += (dy / norm) * speed
             else:
                 # 移動が完了
-                self.is_moving = False
-                self.hp        = self.hp_max
+                # リングをふくらませる
+                self.rings_r[self.step-1] += 1
+                if self.rings_r[self.step-1] >= self.w * (1.1 ** self.step):
+                    # リングが膨らみきれば攻撃フェーズへ
+                    self.is_moving = False
+                    self.hp        = self.hp_max
         else:
             # 攻撃
             if self.step == 1:
@@ -102,6 +108,9 @@ class BossBase(pg.sprite.Sprite):
         screen : pg.Surface
             スクリーンのオブジェクト
         """
+        # リングの描画
+        for r in self.rings_r:
+            pg.draw.circle(screen, '#00bfff', self.rect.center, r, 2)
         screen.blit(self.surface, self.rect)
         
         
