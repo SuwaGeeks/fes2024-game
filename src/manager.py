@@ -50,7 +50,7 @@ class GameManager():
         self.enemy_bullets: list[BulletBase] = []
         
         self.enemies: list[Enemy.EnemyBase] = []
-        self.boss: Union[boss.BossBase, None] = None
+        self.boss: Union[boss.BossBase, None] = boss.Boss5()
         
         self.stage = 1
         
@@ -149,10 +149,48 @@ class GameManager():
             if self.enemy_cycle < sum(self.sec_to_boss[:self.stage]) * CFG.fps:
                 # 雑魚敵と遊ぶ時間は雑魚敵を発生させる
                 self.enemy_cycle += 1
-                if random.random() > 0.995:
-                    x = random.randint(0, CFG.screen_h / 2)
-                    y = random.randint(0, CFG.screen_w - 48)
-                    self.enemies.append(Enemy.EnemyB1())
+                r = random.random()
+                is_spawn = random.random() <= (0.5 * self.stage / CFG.fps)
+                if self.stage == 1 and is_spawn:
+                    if  r <= 0.4:
+                        self.enemies.append(Enemy.EnemyB1())
+                    elif r <= 0.8:
+                        self.enemies.append(Enemy.EnemyR2())
+                    elif r <= 1.0:
+                        self.enemies.append(Enemy.EnemyY3())
+
+                if self.stage == 2 and is_spawn:
+                    if  r <= 0.4:
+                        self.enemies.append(Enemy.EnemyY2())
+                    elif r <= 0.8:
+                        self.enemies.append(Enemy.EnemyR1())
+                    elif r <= 1.0:
+                        self.enemies.append(Enemy.EnemyG2())
+
+                if self.stage == 3 and is_spawn:
+                    if  r <= 0.4:
+                        self.enemies.append(Enemy.EnemyB2())
+                    elif r <= 0.8:
+                        self.enemies.append(Enemy.EnemyG1())
+                    elif r <= 1.0:
+                        self.enemies.append(Enemy.EnemyR3())
+
+                if self.stage == 4 and is_spawn:
+                    if  r <= 0.4:
+                        self.enemies.append(Enemy.EnemyY1())
+                    elif r <= 0.8:
+                        self.enemies.append(Enemy.EnemyG2())
+                    elif r <= 1.0:
+                        self.enemies.append(Enemy.EnemyB3())
+
+                if self.stage == 5 and is_spawn:
+                    if  r <= 0.4:
+                        self.enemies.append(Enemy.EnemyR2())
+                    elif r <= 0.8:
+                        self.enemies.append(Enemy.EnemyB2())
+                    elif r <= 1.0:
+                        self.enemies.append(Enemy.EnemyG3())
+                    
             else:
                 # 雑魚敵を撤退させる
                 for enemy in self.enemies:

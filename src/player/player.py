@@ -62,8 +62,6 @@ class Player(pg.sprite.Sprite):
             敵が発射した弾のリスト
         player_bullets : list[BulletBase]
             プレイヤーが発射した弾のリスト
-        bomb : Bomb
-            ボムのインスタンス
         """
          
         # 各カウンタを進める
@@ -113,8 +111,8 @@ class Player(pg.sprite.Sprite):
         for bullet in enemy_bullets:
             
             # 理不尽さ回避のため自機の当たり判定は中心 1px のみ
-            # if bullet.rect.collidepoint(x_p, y_p) and self.god_time == 0:
-            if bullet.rect.colliderect(self.rect) and self.god_time == 0:
+            x, y = self.rect.center
+            if bullet.rect.collidepoint(x, y) and self.god_time == 0:
                 self.hp -= 1
                 pg.mixer.Sound("assets/sounds/p_break.mp3").play()
                 self.god_time = CFG.player_god_time
