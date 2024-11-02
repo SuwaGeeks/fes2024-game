@@ -1,5 +1,6 @@
 import pygame as pg
 import math
+import random
 from config import Config as CFG
 from ..Bullet.bullet import BulletBase
 
@@ -34,6 +35,9 @@ class BossBase(pg.sprite.Sprite):
         self.hp     = 0
         self.hp_max = None
         self.score  = None
+        self.speeds = []
+        
+        self.dist_x, self.dist_y = self._random_pos_to_move()
         
         self.rings_r = [0, 0, 0]
         
@@ -42,6 +46,7 @@ class BossBase(pg.sprite.Sprite):
         # アニメーションのリスト
         self.surfaces:list[pg.Surface] = []
         self.anime_cycle = 0
+
 
     def update(
         self, 
@@ -77,6 +82,18 @@ class BossBase(pg.sprite.Sprite):
                     self.is_moving = False
                     self.hp        = self.hp_max
         else:
+            
+            # 移動
+            x = self.dist_x - self.rect.x
+            y = self.dist_y - self.rect.y
+            norm = math.sqrt(x**2 + y**2)
+            
+            if norm > 5:
+                self.rect.x += (x / norm) * self.speeds[self.step-1]
+                self.rect.y += (y / norm) * self.speeds[self.step-1]
+            else:
+                self.dist_x, self.dist_y = self._random_pos_to_move()
+            
             # 攻撃
             if self.step == 1:
                 self._update_1(enemy_bullets, player_bullets)
@@ -177,3 +194,16 @@ class BossBase(pg.sprite.Sprite):
             プレイヤーが発射した弾のリスト
         """
         raise NotImplementedError
+    
+    
+    def _random_pos_to_move(self) -> tuple[int, int]:
+        """移動領域の座標を生成
+
+        Returns
+        -------
+        tuple[int, int]
+            移動領域の座標 `(x, y)`
+        """
+        x = random.randint(0, int(CFG.screen_w - self.w))
+        y = random.randint(0, int(CFG.screen_h / 4))
+        return x, y
