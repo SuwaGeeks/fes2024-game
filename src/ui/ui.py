@@ -1,7 +1,7 @@
 import pygame as pg
 from ..player.player import Player
 from config import Config as CFG
-
+from src import boss
 from typing import Union
 
 class UI(pg.sprite.Sprite):
@@ -34,11 +34,14 @@ class UI(pg.sprite.Sprite):
         self.mp_1p, self.mp_2p = None, None
         self.lv_1p, self.lv_2p = None, None
         
+        # ボスの体力の割合
+        self.boss_hp_rate = 0
     
     def update(
         self, 
         player_1: Player,
-        player_2: Union[Player, None] = None
+        player_2: Union[Player, None] = None,
+        boss: Union[boss.BossBase, None] = None
     ) -> None:
         """プレイ中のUIを更新
 
@@ -48,6 +51,8 @@ class UI(pg.sprite.Sprite):
             1P のインスタンス
         player_2 : Union[Player | None], optional
             2P のインスタンス, by default None
+        boss : Union[boss.BossBas | None], optional
+            ボスのインスタンス, by default None
         """
         self.score_text_1p = self.font_status.render(f'SCORE: {player_1.score}', True, pg.Color('WHITE'))
         self.hp_1p = max(0, player_1.hp)
@@ -59,7 +64,11 @@ class UI(pg.sprite.Sprite):
             self.hp_2p = max(0, player_2.hp)
             self.mp_2p = max(0, player_2.mp)
             self.lv_2p = max(0, player_2.level)
-        
+            
+        if boss is not None:
+            self.boss_hp_rate = max(0, boss.hp) / boss.hp_max
+        else:
+            self.boss_hp_rate = 0
         
     
     def blit(self, screen: pg.Surface) -> None:
@@ -91,7 +100,6 @@ class UI(pg.sprite.Sprite):
         # TODO: マジックナンバーをなくす
         screen.blit(self.lv_text, (x_start, self.row3 + 5))
         pg.draw.rect(screen, '#00FF00', pg.Rect(self.font_size*2, self.row3 + 13, self.font_size * self.lv_1p, 10))
-        
             
         # ステータス(2P)
         if self.hp_2p is not None:
@@ -110,3 +118,7 @@ class UI(pg.sprite.Sprite):
             # TODO: マジックナンバーをなくす
             screen.blit(self.lv_text, (x_start, self.row3 + 5))
             pg.draw.rect(screen, '#00FF00', pg.Rect(x_start - self.font_size * (self.lv_2p+1), self.row3 + 13, self.font_size * self.lv_2p, 10))
+            
+        # ボスの体力
+        boss_hp_bar_w = CFG.screen_w * 0.5 * self.boss_hp_rate
+        pg.draw.rect(screen, '#00FF00', pg.Rect(CFG.screen_w / 2 - boss_hp_bar_w / 2, CFG.top_limit + 13, boss_hp_bar_w, 10))

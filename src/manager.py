@@ -1,12 +1,15 @@
 import pygame as pg
 from pygame.locals import *
 import random
+from typing import Union
 from src.player.player import Player
 from src.enemy.enemy_b1 import EnemyB1
 from src.enemy.enemy import EnemyBase
 from src.bullet.bullet import BulletBase
 from src.ui.ui import UI
 from src.ui.title import Title
+
+from src import boss
 
 from config import Config as CFG
 from .macro import *
@@ -45,7 +48,13 @@ class GameManager():
         self.player_bullets: list[BulletBase] = []
         self.enemy_bullets: list[BulletBase] = []
         self.enemies: list[EnemyBase] = []
-        self.boss = None
+        self.boss: Union[boss.BossBase, None] = None
+        
+        self.stage = 1
+        
+        # ボス出現までの時間
+        self.enemy_cycle = 0
+        self.sec_to_boss = [30, 30, 30, 30, 30]
     
     
     def update(self) -> None:
@@ -117,12 +126,6 @@ class GameManager():
     
     
     def _update_play(self):
-                # 適当な敵のスポーン
-        if random.random() > 0.995:
-            x = random.randint(0, CFG.screen_h / 2)
-            y = random.randint(0, CFG.screen_w - 48)
-            self.enemies.append(EnemyB1())
-            
         
         # プレイヤーの更新
         self.player.update(self.enemy_bullets ,self.player_bullets)
@@ -132,12 +135,43 @@ class GameManager():
             bullet.update()
         for bullet in self.enemy_bullets:
             bullet.update()
-    
-        # 雑魚敵の更新
-        enemy_rets = [enemy.update(self.enemy_bullets, self.player_bullets) for enemy in self.enemies]
-        is_alive = [x == 0 for x in enemy_rets]
-        self.enemies = [enemy for enemy, flag in zip(self.enemies, is_alive) if flag]
-        self.player.score += sum([max(x, 0) for x in enemy_rets])
+                
+        if self.boss is None:
+            # 雑魚敵フェーズ
+            
+            # 適当に敵をすぽーんさせる
+            if self.enemy_cycle < sum(self.sec_to_boss[:self.stage]) * CFG.fps:
+                # 雑魚敵と遊ぶ時間は雑魚敵を発生させる
+                self.enemy_cycle += 1
+                if random.random() > 0.995:
+                    x = random.randint(0, CFG.screen_h / 2)
+                    y = random.randint(0, CFG.screen_w - 48)
+                    self.enemies.append(EnemyB1())
+            else:
+                # 雑魚敵を撤退させる
+                for enemy in self.enemies:
+                    enemy.ttl = 0
+        
+        
+            # 雑魚敵の更新
+            enemy_rets = [enemy.update(self.enemy_bullets, self.player_bullets) for enemy in self.enemies]
+            is_alive = [x == 0 for x in enemy_rets]
+            self.enemies = [enemy for enemy, flag in zip(self.enemies, is_alive) if flag]
+            self.player.score += sum([max(x, 0) for x in enemy_rets])
+            
+            # ボスの発生条件を満たして雑魚敵が撤退すればボスを生成
+            if len(self.enemies) == 0 and self.enemy_cycle == sum(self.sec_to_boss[:self.stage]) * CFG.fps:
+                # TODO: ステージによってボスを変える
+                self.boss = boss.Boss1()
+            
+        else:
+            # ボス戦
+            self.boss.update(self.enemy_bullets, self.player_bullets)
+            # ボス撃破
+            if not self.boss.is_alive:
+                self.player.score += self.boss.score
+                self.boss = None
+                self.stage += 1
         
         # 画面外またはヒットした弾を削除
         is_alive = [bullet.is_alive for bullet in self.player_bullets]
@@ -147,7 +181,7 @@ class GameManager():
         self.enemy_bullets = [bullet for bullet, flag in zip(self.enemy_bullets, is_alive) if flag]
         
         # UIの更新
-        self.ui.update(self.player)
+        self.ui.update(self.player, boss=self.boss)
     
     
     def _update_score(self):
@@ -162,6 +196,7 @@ class GameManager():
         
         self.screen.fill(pg.Color("BLACK")) 
         
+        
         for bullet in self.player_bullets:
             bullet.blit(self.screen)
         for bullet in self.enemy_bullets:
@@ -169,6 +204,9 @@ class GameManager():
         
         for enemy in self.enemies:
             enemy.blit(self.screen)
+            
+        if self.boss is not None:
+            self.boss.blit(self.screen)
             
         self.player.blit(self.screen)
         
