@@ -11,8 +11,8 @@ class BulletE1(BulletBase):
         y: int,
         v_x: int,
         v_y: int,
-        w: int = 32,
-        h: int= 32
+        w: int = 4,
+        h: int= 12
     ) -> None:
         """弾を生成
 
@@ -35,7 +35,7 @@ class BulletE1(BulletBase):
         
         # surface, damage をオーバライド
         self.damage  = 5
-        self.surface = pg.image.load('assets/bullet/e_bullet-1.png')
+        self.surface = pg.image.load('assets/bullet/bullet-0.png')
         self.surface = pg.transform.scale(self.surface, (self.w, self.h))
     
     

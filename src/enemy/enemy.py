@@ -45,10 +45,13 @@ class EnemyBase(pg.sprite.Sprite):
         self.score   = None
         self.hp      = None
         self.speed   = None
-        self.surface = None
         
         self.rect = pg.rect.Rect(self.x, self.y, self.w, self.h)
     
+        # アニメーションのリスト
+        self.surfaces:list[pg.Surface] = []
+
+        self.anime_cycle = 0
     
     def update(
         self, 
@@ -72,6 +75,7 @@ class EnemyBase(pg.sprite.Sprite):
             - それ以外: 0
         """
         
+        self.anime_cycle += 1
         self.ttl -= 1
         
         # 移動処理
@@ -126,8 +130,12 @@ class EnemyBase(pg.sprite.Sprite):
         screen : pg.Surface
             スクリーンのオブジェクト
         """
-        
-        screen.blit(self.surface, self.rect)
+        x = CFG.fps / 2
+        y = self.anime_cycle % x
+        if y <= x / 2:
+           screen.blit(self.surfaces[0],self.rect)
+        else:
+            screen.blit(self.surfaces[1],self.rect)
         
     
     def random_pos_to_spawn(self) -> tuple[int, int]:
