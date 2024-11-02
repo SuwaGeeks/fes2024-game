@@ -210,12 +210,20 @@ class GameManager():
             
             # ボスの発生条件を満たして雑魚敵が撤退すればボスを生成
             if len(self.enemies) == 0 and self.enemy_cycle == sum(self.sec_to_boss[:self.stage]) * CFG.fps:
-                # TODO: ステージによってボスを変える
-                self.boss = boss.Boss1()
+                if self.stage == 1:
+                    self.boss = boss.Boss1()
+                elif self.stage == 2:
+                    self.boss = boss.Boss2()
+                elif self.stage == 3:
+                    self.boss = boss.Boss3()
+                elif self.stage == 4:
+                    self.boss = boss.Boss4()
+                elif self.stage == 5:
+                    self.boss = boss.Boss5()
             
         else:
             # ボス戦
-            self.boss.update(self.enemy_bullets, self.player_bullets)
+            self.boss.update(self.enemy_bullets, self.player_bullets, self.player)
             # ボス撃破
             if not self.boss.is_alive:
                 self.player.score += self.boss.score
