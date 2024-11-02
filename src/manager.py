@@ -3,8 +3,7 @@ from pygame.locals import *
 import random
 from typing import Union
 from src.player.player import Player
-from src.enemy.enemy_b1 import EnemyB1
-from src.enemy.enemy import EnemyBase
+from src import enemy
 from src.bullet.bullet import BulletBase
 from src.ui.ui import UI
 from src.ui.title import Title
@@ -47,6 +46,7 @@ class GameManager():
         
         self.player_bullets: list[BulletBase] = []
         self.enemy_bullets: list[BulletBase] = []
+        
         self.enemies: list[EnemyBase] = []
         self.boss: Union[boss.BossBase, None] = None
         

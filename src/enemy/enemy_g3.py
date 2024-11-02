@@ -2,18 +2,18 @@ import pygame as pg
 
 
 from .enemy import EnemyBase
-from ..bullet.bullet_e2 import BulletE2
+from ..bullet.bullet_e3 import BulletE3
 from ..bullet.bullet import BulletBase
 from config import Config as CFG
 
-class EnemyB1(EnemyBase):
+class EnemyG3(EnemyBase):
     
     def __init__(
         self,
         x: int = None,
         y: int = None,
-        w: int = 48,
-        h: int = 48
+        w: int = 60,
+        h: int = 60
     ) -> None:
         """雑魚敵を作成
 
@@ -34,11 +34,11 @@ class EnemyB1(EnemyBase):
         self.shot_cycle = 1 * CFG.fps
                
         # hp, score, speed, surface を上書き
-        self.score = 100
+        self.score = 300
         self.hp    = 3
-        self.speed = 3
+        self.speed = 8
         
-        self.surfaces = [pg.image.load(f"assets/enemy/b1_{i + 1}.png") for i in range(2)]
+        self.surfaces = [pg.image.load(f"assets/enemy/g3_{i + 1}.png") for i in range(2)]
         self.surfaces = [pg.transform.scale(surface, (self.h, self.w)) for surface in self.surfaces]
     
     
@@ -67,7 +67,9 @@ class EnemyB1(EnemyBase):
         
         # 弾の発射処理，enemy_bulletsに弾のインスタンスをappendすれば弾が発射される
         if self.shot_cycle == 0:
-            enemy_bullets.append(BulletE2(self.rect.center[0], self.rect.bottom, 0, 20))
+            enemy_bullets.append(BulletE3(self.rect.center[0], self.rect.bottom, -15, 20))
+            enemy_bullets.append(BulletE3(self.rect.center[0], self.rect.bottom, 0, 20))
+            enemy_bullets.append(BulletE3(self.rect.center[0], self.rect.bottom, 15, 20))
             self.shot_cycle = 60
         
         

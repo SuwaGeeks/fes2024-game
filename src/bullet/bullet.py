@@ -1,5 +1,6 @@
 import pygame as pg
 from config import Config as CFG
+import math
 
 class BulletBase(pg.sprite.Sprite):
     
@@ -32,7 +33,7 @@ class BulletBase(pg.sprite.Sprite):
         """
         super().__init__()
         
-        self.x = x
+        self.x = x - w / 2
         self.y = y
         self.w = w
         self.h = h
@@ -44,7 +45,6 @@ class BulletBase(pg.sprite.Sprite):
         
         self.is_alive = True
         self.rect = pg.rect.Rect(self.x, self.y, self.w, self.h)
-        
         
     def update(self):
         """弾の更新処理
@@ -69,5 +69,6 @@ class BulletBase(pg.sprite.Sprite):
         screen : pg.Surface
             スクリーンのオブジェクト
         """
-        
-        screen.blit(self.surface, self.rect)
+        angle = math.degrees(math.atan2(self.v_x, abs(self.v_y)))
+        surface = pg.transform.rotate(self.surface, angle)
+        screen.blit(surface, self.rect)
