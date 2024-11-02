@@ -2,8 +2,7 @@ import pygame as pg
 from pygame.locals import *
 import random
 from src.player.player import Player
-from src.enemy.enemy_b1 import EnemyB1
-from src.enemy.enemy import EnemyBase
+from src import enemy
 from src.bullet.bullet import BulletBase
 from src.ui.ui import UI
 from src.ui.title import Title
@@ -44,7 +43,7 @@ class GameManager():
         
         self.player_bullets: list[BulletBase] = []
         self.enemy_bullets: list[BulletBase] = []
-        self.enemies: list[EnemyBase] = []
+        self.enemies: list[enemy.EnemyBase] = []
         self.boss = None
     
     
@@ -121,7 +120,9 @@ class GameManager():
         if random.random() > 0.995:
             x = random.randint(0, CFG.screen_h / 2)
             y = random.randint(0, CFG.screen_w - 48)
-            self.enemies.append(EnemyB1())
+            self.enemies.append(enemy.EnemyB1())
+            self.enemies.append(enemy.EnemyB2())
+            self.enemies.append(enemy.EnemyB3())
             
         
         # プレイヤーの更新
