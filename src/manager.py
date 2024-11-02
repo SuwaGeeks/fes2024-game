@@ -3,7 +3,7 @@ from pygame.locals import *
 import random
 from typing import Union
 from src.player.player import Player
-from src import enemy
+from src import Enemy
 from src.bullet.bullet import BulletBase
 from src.ui.ui import UI
 from src.ui.title import Title
@@ -47,7 +47,7 @@ class GameManager():
         self.player_bullets: list[BulletBase] = []
         self.enemy_bullets: list[BulletBase] = []
         
-        self.enemies: list[EnemyBase] = []
+        self.enemies: list[Enemy.EnemyBase] = []
         self.boss: Union[boss.BossBase, None] = None
         
         self.stage = 1
@@ -146,7 +146,7 @@ class GameManager():
                 if random.random() > 0.995:
                     x = random.randint(0, CFG.screen_h / 2)
                     y = random.randint(0, CFG.screen_w - 48)
-                    self.enemies.append(EnemyB1())
+                    self.enemies.append(Enemy.EnemyB1())
             else:
                 # 雑魚敵を撤退させる
                 for enemy in self.enemies:
