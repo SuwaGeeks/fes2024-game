@@ -130,6 +130,6 @@ class ScoreBoard(pg.sprite.Sprite):
                 scores = [row for row in reader]
                     
             
-            top_scores = scores[: min(len(scores), self.n_tops)]
+            top_scores = sorted(scores, reverse=True)[: min(len(scores), self.n_tops)]
             
         return sorted(top_scores, reverse=True)
