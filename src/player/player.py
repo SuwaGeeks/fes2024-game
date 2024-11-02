@@ -90,9 +90,9 @@ class Player(pg.sprite.Sprite):
                 self.hp = min(5, self.hp + n_hps)
             
         # 爆弾を増やす
-        if self.score > self.n_additional_mps *1000:
+        if self.score > self.n_additional_mps *15000:
             pg.mixer.Sound('assets/sounds/hp_up.mp3')
-            n_mps = int((self.score-self.n_additional_mps*1000)/1000)
+            n_mps = int((self.score-self.n_additional_mps*15000)/15000)
             self.n_additional_mps += n_mps
             self.mp = min(5, self.mp + n_mps)
         
