@@ -43,9 +43,14 @@ class Player(pg.sprite.Sprite):
         self.hp    = CFG.player_default_hp
         self.mp    = CFG.player_default_mp
         
+        self.lv5_score = None
+        self.n_additional_hps = 0
+        self.n_additional_mps = 0
+        
         self.surface = pg.image.load('assets/player/player1.png')
         self.surface = pg.transform.scale(self.surface, (self.w, self.h))
         self.rect    = pg.rect.Rect(self.x, self.y, self.w, self.h)
+        
         
         
     def update(
@@ -70,6 +75,26 @@ class Player(pg.sprite.Sprite):
         if self.god_time > 0:
             self.god_time -= 1
         
+        # スコアをもとにレベルアップ
+        self.level = min(5, 1+self.score/20000)
+        if self.level == 5 and self.lv5_score is None:
+            self.lv5_score = self.score
+        
+        # ハートを増やす
+        if self.level == 5:
+            after_lv5_score = self.score - self.lv5_score
+            if after_lv5_score > self.n_additional_hps *10000:
+                pg.mixer.Sound('assets/sounds/hp_up.mp3')
+                n_hps = int((after_lv5_score-self.n_additional_hps*10000)/10000)
+                self.n_additional_hps += n_hps
+                self.hp = min(5, self.hp + n_hps)
+            
+        # 爆弾を増やす
+        if self.score > self.n_additional_mps *1000:
+            pg.mixer.Sound('assets/sounds/hp_up.mp3')
+            n_mps = int((self.score-self.n_additional_mps*1000)/1000)
+            self.n_additional_mps += n_mps
+            self.mp = min(5, self.mp + n_mps)
         
         key = pg.key.get_pressed()
         
@@ -168,7 +193,7 @@ class Player(pg.sprite.Sprite):
             bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 5, -20))
             bullet_list.append(Bullet.BulletP2(player_center, self.rect.top, 0, -20))
             bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, -5, -20))
-        elif self.level < 5:
+        else:
             # Lv.4 5-way + 真ん中強化+2
             bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 10, -20))
             bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 5, -20))
