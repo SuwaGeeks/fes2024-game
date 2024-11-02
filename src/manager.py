@@ -2,6 +2,7 @@ import pygame as pg
 from pygame.locals import *
 import random
 from typing import Union
+from src.bomb.bomb import Bomb
 from src.player.player import Player
 from src.enemy.enemy_b1 import EnemyB1
 from src.enemy.enemy import EnemyBase
@@ -38,6 +39,7 @@ class GameManager():
         self.screen = pg.display.set_mode((screen_w, screen_h))
     
         self.player = Player(screen_w/2 - 48/2, screen_h*0.8, 48, 48)
+        self.bomb = Bomb()
         
         self.step = STEP_TITLE
         self.is_step_up = False
@@ -130,6 +132,10 @@ class GameManager():
         # プレイヤーの更新
         self.player.update(self.enemy_bullets ,self.player_bullets)
         
+        if self.player.use_bomb():
+            self.bomb.bomb(self.player)
+        self.bomb.update(self.enemies, self.boss)
+        
         # 弾の更新
         for bullet in self.player_bullets:
             bullet.update()
@@ -207,6 +213,8 @@ class GameManager():
             
         if self.boss is not None:
             self.boss.blit(self.screen)
+            
+        self.bomb.blit(self.screen)
             
         self.player.blit(self.screen)
         

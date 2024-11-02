@@ -99,9 +99,9 @@ class EnemyBase(pg.sprite.Sprite):
                 self.hp -= bullet.damage
                 bullet.is_alive = False
                 
-            if self.hp <= 0:
-                pg.mixer.Sound("assets/sounds/e_break.mp3").play()
-                return self.score
+        if self.hp <= 0:
+            pg.mixer.Sound("assets/sounds/e_break.mp3").play()
+            return self.score
             
         # 行動範囲外で消滅
         is_out_of_screen = self.rect.left < -CFG.spawn_area_width or \

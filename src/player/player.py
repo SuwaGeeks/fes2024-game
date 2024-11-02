@@ -1,3 +1,4 @@
+from typing import Literal
 import pygame as pg
 from config import Config as CFG
 from ..bullet.bullet import BulletBase
@@ -33,6 +34,8 @@ class Player(pg.sprite.Sprite):
         self.w = w
         self.h = h
         
+        self.id = 0
+        
         self.shot_cycle = 0
         self.god_time   = 0
         
@@ -59,6 +62,8 @@ class Player(pg.sprite.Sprite):
             敵が発射した弾のリスト
         player_bullets : list[BulletBase]
             プレイヤーが発射した弾のリスト
+        bomb : Bomb
+            ボムのインスタンス
         """
          
         # 各カウンタを進める
@@ -82,7 +87,7 @@ class Player(pg.sprite.Sprite):
             self.rect.x -= CFG.player_speed
             
         if CFG.use_gamepad:
-            joy = pg.joystick.Joystick(0)
+            joy = pg.joystick.Joystick(self.id)
             self.rect.y += joy.get_axis(1) * CFG.player_speed
             self.rect.x += joy.get_axis(0) * CFG.player_speed
             
@@ -150,3 +155,23 @@ class Player(pg.sprite.Sprite):
         
         if self.level > 0:
             bullet_list.append(BulletP1(player_center, self.rect.top, 0, -20))
+            
+    
+    def use_bomb(self) -> bool:
+        """プレイヤーがボムを使うか
+
+        Returns
+        -------
+        bool
+            プレイヤーがボムを使うかのフラグ
+        """
+        joy = pg.joystick.Joystick(self.id)
+        key = pg.key.get_pressed()
+        
+        is_pressed_pad = False
+        if CFG.use_gamepad:
+            is_pressed_pad = joy.get_button(CFG.pad_map['bomb'])
+        if key[CFG.key_map['bomb']] or is_pressed_pad:
+            return True
+        else:
+            return False

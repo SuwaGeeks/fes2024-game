@@ -5,6 +5,7 @@ class Config():
     key_map = {
         'exit' : pg.K_ESCAPE,
         'shot' : pg.K_z,
+        'bomb' : pg.K_x,
         'up'   : pg.K_UP,
         'down' : pg.K_DOWN,
         'right': pg.K_RIGHT,
@@ -14,7 +15,9 @@ class Config():
     pad_map = {
         'exit' : 0,
         'shot' : 1,
+        'bomb' : 3
     }
+    
 
     use_gamepad = True
     
