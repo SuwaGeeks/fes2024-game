@@ -13,7 +13,7 @@ class Config():
     }
     
     pad_map = {
-        'exit' : 16,
+        'exit' : 0,
         'shot' : 1,
         'bomb' : 3
     }
