@@ -5,7 +5,7 @@ from typing import Union
 from src.bomb.bomb import Bomb
 from src.player.player import Player
 from src import enemy as Enemy
-from src.bullet.bullet import bullet as BulletBase
+from src.bullet import bullet as BulletBase
 from src.ui.ui import UI
 from src.ui.title import Title
 from src.ui.score_board import ScoreBoard
