@@ -13,7 +13,7 @@ class Config():
     }
     
     pad_map = {
-        'exit' : 0,
+        'exit' : 16,
         'shot' : 1,
         'bomb' : 3
     }
@@ -31,7 +31,7 @@ class Config():
     fps = 60
     screen_w = 600
     screen_h = 800
-    is_fullscreen = False
+    is_fullscreen = True
     
     user_name_max_len = 16
     
