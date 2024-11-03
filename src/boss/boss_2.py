@@ -22,7 +22,7 @@ class Boss2(BossBase):
         
         # 以下のパラメータをオーバライド
         self.hp_max = 20000
-        self.score  = 20000
+        self.score  = 10000
         self.speeds = [5, 5, 8]
         
         self.surfaces = [pg.image.load(f"assets/boss/2_{i + 1}.png") for i in range(2)]
