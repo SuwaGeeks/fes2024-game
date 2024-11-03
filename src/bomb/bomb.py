@@ -4,6 +4,7 @@ from typing import Union
 from config import Config as CFG
 
 from ..enemy import EnemyBase
+from ..boss import BossBase
 from ..player.player import Player
 
 class Bomb(pg.sprite.Sprite):
@@ -41,9 +42,7 @@ class Bomb(pg.sprite.Sprite):
     def update(
         self,
         enemies: list[EnemyBase],
-        boss
-        # TODO: bomb と player が循環参照するので良くない
-        # boss: Union[BossBase, None]
+        boss: Union[BossBase, None]
     ) -> None:
         """ボムのアップデート
 
@@ -72,7 +71,8 @@ class Bomb(pg.sprite.Sprite):
                 r = math.sqrt((x-self.x)**2 + (y-self.x)**2)
                 
                 if self.radius > r and id(boss) not in self.damaged_enemy_ids:
-                    boss.hp -= self.damage
+                    # ボスの全体力の半分のダメージを与える
+                    boss.hp -= boss.hp_max / 2
                     self.damaged_enemy_ids.add(id(boss))
                     
                     
