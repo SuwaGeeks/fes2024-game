@@ -2,7 +2,7 @@ import pygame as pg
 from config import Config as CFG
 from .bullet import BulletBase
 
-class BulletP2(BulletBase):
+class BulletP4(BulletBase):
     
     def __init__(
         self,
@@ -35,8 +35,8 @@ class BulletP2(BulletBase):
         # pg.mixer.Sound("assets/sounds/shot.mp3").play()
         
         # surface, damage をオーバライド
-        self.damage  = 800
-        self.surface = pg.image.load('assets/bullet/p2_bullet.png')
+        self.damage  = 1200
+        self.surface = pg.image.load('assets/bullet/p4_bullet.png')
         self.surface = pg.transform.scale(self.surface, (self.w, self.h))
     
     

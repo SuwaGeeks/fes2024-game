@@ -36,7 +36,7 @@ class BulletP1(BulletBase):
         # pg.mixer.Sound("assets/sounds/shot.mp3").play()
         
         # surface, damage をオーバライド
-        self.damage  = 800
+        self.damage  = 500
         self.surface = pg.image.load('assets/bullet/p1_bullet.png')
         self.surface = pg.transform.scale(self.surface, (self.w, self.h))
     
