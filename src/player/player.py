@@ -38,7 +38,7 @@ class Player(pg.sprite.Sprite):
         self.shot_cycle = 0
         self.god_time   = 0
         
-        self.score = 0
+        self.score = 80000
         self.level = CFG.player_default_level
         self.hp    = CFG.player_default_hp
         self.mp    = CFG.player_default_mp
@@ -185,23 +185,23 @@ class Player(pg.sprite.Sprite):
             bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 0, -20))
         elif self.level < 3:
             # Lv.2 3-way
-            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 5, -20))
-            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 0, -20))
-            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, -5, -20))
+            bullet_list.append(Bullet.BulletP1(player_center, self.rect.top, 5, -20))
+            bullet_list.append(Bullet.BulletP1(player_center, self.rect.top, 0, -20))
+            bullet_list.append(Bullet.BulletP1(player_center, self.rect.top, -5, -20))
         elif self.level < 4:
             # Lv.3 3-way + 真ん中強化
-            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 5, -20))
-            bullet_list.append(Bullet.BulletP2(player_center, self.rect.top, 0, -20))
-            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, -5, -20))
+            bullet_list.append(Bullet.BulletP2(player_center, self.rect.top, 5, -20))
+            bullet_list.append(Bullet.BulletP3(player_center, self.rect.top, 0, -20))
+            bullet_list.append(Bullet.BulletP2(player_center, self.rect.top, -5, -20))
         else:
             # Lv.4 5-way + 真ん中強化+2
-            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 10, -20))
-            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, 5, -20))
-            bullet_list.append(Bullet.BulletP2(player_center+20, self.rect.top, 0, -20))
-            bullet_list.append(Bullet.BulletP4(player_center, self.rect.top-20, 0, -20))
-            bullet_list.append(Bullet.BulletP2(player_center-20, self.rect.top, 0, -20))
-            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, -5, -20))
-            bullet_list.append(Bullet.BulletP0(player_center, self.rect.top, -10, -20))
+            bullet_list.append(Bullet.BulletP3(player_center, self.rect.top, 10, -20))
+            bullet_list.append(Bullet.BulletP3(player_center, self.rect.top, 5, -20))
+            bullet_list.append(Bullet.BulletP3(player_center+20, self.rect.top, 0, -20))
+            bullet_list.append(Bullet.BulletP5(player_center, self.rect.top-20, 0, -20))
+            bullet_list.append(Bullet.BulletP3(player_center-20, self.rect.top, 0, -20))
+            bullet_list.append(Bullet.BulletP3(player_center, self.rect.top, -5, -20))
+            bullet_list.append(Bullet.BulletP3(player_center, self.rect.top, -10, -20))
             
     
     def use_bomb(self) -> bool:
