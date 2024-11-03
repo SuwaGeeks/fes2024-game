@@ -3,7 +3,7 @@ import math
 from typing import Union
 from config import Config as CFG
 
-from ..Enemy import EnemyBase
+from ..enemy import EnemyBase
 from ..player.player import Player
 
 class Bomb(pg.sprite.Sprite):
