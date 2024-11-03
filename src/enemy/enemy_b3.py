@@ -2,8 +2,8 @@ import pygame as pg
 
 
 from .enemy import EnemyBase
-from ..bullet.bullet_e3 import BulletE3
-from ..bullet.bullet import BulletBase
+from ..bullet.bullet_e3 import bullet as BulletE3
+from ..bullet.bullet import bullet as BulletBase
 from config import Config as CFG
 
 class EnemyB3(EnemyBase):

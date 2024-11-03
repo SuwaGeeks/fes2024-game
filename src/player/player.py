@@ -1,7 +1,7 @@
 from typing import Literal
 import pygame as pg
 from config import Config as CFG
-from ..bullet.bullet import BulletBase
+from .. import bullet as Bullet
 
 class Player(pg.sprite.Sprite):
 

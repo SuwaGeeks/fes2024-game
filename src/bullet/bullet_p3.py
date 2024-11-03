@@ -1,6 +1,6 @@
 import pygame as pg
 from config import Config as CFG
-from .bullet import BulletBase
+from .bullet import bullet as BulletBase
 
 class BulletP3(BulletBase):
     
