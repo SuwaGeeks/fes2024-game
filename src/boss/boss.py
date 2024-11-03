@@ -2,7 +2,7 @@ import pygame as pg
 import math
 import random
 from config import Config as CFG
-from ..Bullet.bullet import BulletBase
+from ..bullet.bullet import BulletBase
 from ..player.player import Player
 
 class BossBase(pg.sprite.Sprite):
