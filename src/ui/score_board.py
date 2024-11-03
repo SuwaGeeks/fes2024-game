@@ -51,15 +51,9 @@ class ScoreBoard(pg.sprite.Sprite):
         else:
             # 続行処理
             key = pg.key.get_pressed()
-            if any(key):
+            if key[CFG.key_map['continue']]:
                 self.is_continue = True
                 pg.mixer.Sound("assets/sounds/start.mp3").play()
-            
-            if CFG.use_gamepad:
-                joy = pg.joystick.Joystick(0)
-                if any([joy.get_button(btn) for btn in range(joy.get_numbuttons())]):
-                    self.is_continue = True
-                    pg.mixer.Sound("assets/sounds/start.mp3").play()
             
             
     
