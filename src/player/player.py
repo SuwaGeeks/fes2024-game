@@ -38,7 +38,7 @@ class Player(pg.sprite.Sprite):
         self.shot_cycle = 0
         self.god_time   = 0
         
-        self.score = 20000
+        self.score = 0
         self.level = CFG.player_default_level
         self.hp    = CFG.player_default_hp
         self.mp    = CFG.player_default_mp
