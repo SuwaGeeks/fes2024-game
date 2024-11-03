@@ -35,7 +35,7 @@ class EnemyG1(EnemyBase):
                
         # hp, score, speed, surface を上書き
         self.score = 100
-        self.hp    = 3
+        self.hp    = 3000
         self.speed = 5
         
         self.surfaces = [pg.image.load(f"assets/enemy/g1_{i + 1}.png") for i in range(2)]

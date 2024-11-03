@@ -34,8 +34,8 @@ class EnemyR3(EnemyBase):
         self.shot_cycle = 1 * CFG.fps
                
         # hp, score, speed, surface を上書き
-        self.score = 300
-        self.hp    = 3
+        self.score = 120
+        self.hp    = 3000
         self.speed = 5
         
         self.surfaces = [pg.image.load(f"assets/enemy/r3_{i + 1}.png") for i in range(2)]
