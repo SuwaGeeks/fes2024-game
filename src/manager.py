@@ -1,11 +1,12 @@
 import pygame as pg
 from pygame.locals import *
 import random
+import math
 from typing import Union
 from src.bomb.bomb import Bomb
 from src.player.player import Player
 from src import enemy as Enemy
-from src.bullet import bullet as BulletBase
+from src.bullet import BulletBase
 from src.ui.ui import UI
 from src.ui.title import Title
 from src.ui.score_board import ScoreBoard
@@ -62,7 +63,7 @@ class GameManager():
         
         # ボス出現までの時間
         self.enemy_cycle = 0
-        self.sec_to_boss = [30, 30, 30, 30, 30]
+        self.sec_to_boss = [60, 60, 60, 60, 60]
     
     
     def update(self) -> None:
@@ -162,7 +163,7 @@ class GameManager():
                 # 雑魚敵と遊ぶ時間は雑魚敵を発生させる
                 self.enemy_cycle += 1
                 r = random.random()
-                is_spawn = random.random() <= (0.5 * self.stage / CFG.fps)
+                is_spawn = random.random() <= (math.sqrt(self.player.level) / CFG.fps)
                 if self.stage == 1 and is_spawn:
                     if  r <= 0.4:
                         self.enemies.append(Enemy.EnemyB1())
@@ -235,6 +236,7 @@ class GameManager():
             if not self.boss.is_alive:
                 self.player.score += self.boss.score
                 self.boss = None
+                self.player.hp = min(5, self.player.hp+1)
                 self.stage += 1
         
         # 画面外またはヒットした弾を削除
