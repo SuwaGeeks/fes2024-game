@@ -1,7 +1,7 @@
 import math
 import pygame as pg
 from config import Config as CFG
-from .bullet import bullet as BulletBase
+from .bullet import BulletBase
 
 class BulletP1(BulletBase):
     
