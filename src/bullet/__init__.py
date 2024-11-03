@@ -1,4 +1,4 @@
-from .bullet import bullet as ulletBase
+from .bullet import bullet as BulletBase
 from .bullet_p0 import bullet as BulletP0
 from .bullet_p1 import bullet as BulletP1
 from .bullet_p2 import bullet as BulletP2
