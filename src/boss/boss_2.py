@@ -1,7 +1,7 @@
 import pygame as pg
 import math
 from config import Config as CFG
-from .. import Bullet
+from ..bullet import Bullet
 from .boss import BossBase
 
 class Boss2(BossBase):
