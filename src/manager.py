@@ -4,8 +4,8 @@ import random
 from typing import Union
 from src.bomb.bomb import Bomb
 from src.player.player import Player
-from src import Enemy
-from src.Bullet.bullet import BulletBase
+from src import enemy as Enemy
+from src.bullet.bullet import BulletBase
 from src.ui.ui import UI
 from src.ui.title import Title
 from src.ui.score_board import ScoreBoard
